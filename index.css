@@ -4,8 +4,17 @@ html, body {
       padding: 0;
       margin: 0;
 }
+
+.sideBar {
+      position: absolute;
+      left: 71%;
+      top:  0%;
+      width: 29%;
+      height: 100%;
+}
+
 #map {
       /* configure the size of the map */
-      width: 100%;
+      width: 70%;
       height: 100%;
 }
