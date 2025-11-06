@@ -7,10 +7,13 @@ html, body {
 
 .sideBar {
       position: absolute;
-      left: 71%;
+      left: 70%;
       top:  0%;
-      width: 29%;
-      height: 100%;
+      width: 27.7%;
+      height: 95%;
+      border-left: solid;
+      border-width: 3px;
+      padding: 1%;
 }
 
 #map {
