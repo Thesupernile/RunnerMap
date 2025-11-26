@@ -22,29 +22,10 @@
             <br>
             <button>Calculate Route</button>
             <p id="ErrorFeedback" style="color: red;"></p>
+            <button onclick="clearPoints()">Clear Points</button>
 
         </div>
 
-        <script>
-
-        var testRouteCoords = [];
-        var map = L.map('map').setView({lon: 0.13488678725880782, lat: 52.18808662172259}, 19);
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-        }).addTo(map);
-
-        var testRoute = L.polyline(testRouteCoords).addTo(map);
-
-        function onMapClick(e) {
-            testRouteCoords.push(e.latlng); 
-            testRoute = L.polyline(testRouteCoords).addTo(map);
-            L.marker(e.latlng).addTo(map);
-        }   
-
-        map.on('click', onMapClick);
-
-
-        </script>
+        <script src="index.js"></script>
     </body>
 </html>
