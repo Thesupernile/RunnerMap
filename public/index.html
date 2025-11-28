@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/leaflet.css">
+        <title>Runner Map</title>
+    </head>
+    <body>
+        <div id="map"></div>
+        <div id="sideBar" class="sideBar">
+            <h1>Runner Map V0.2.1</h1>
+            <br>
+            <p>Route Distance:  XXXkm</p>
+            <p>Destinations Required:  XXX</p>
+            <p>Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
+            <p>Length Of Route Wanted: <input></input></p>
+            <p>Round Trip? <input type="checkbox"></input></p>
+            <br>
+            <br>
+            <button>Calculate Route</button>
+            <p id="ErrorFeedback" style="color: red;"></p>
+            <button onclick="clearPoints()">Clear Points</button>
+
+        </div>
+
+        <script src="javascripts/webmap.js"></script>
+    </body>
+</html>
