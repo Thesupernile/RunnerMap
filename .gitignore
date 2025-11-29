@@ -1,2 +1,4 @@
 /leaflet
 /node_modules
+
+*.txt
