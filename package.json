@@ -1,6 +1,6 @@
 {
-  "name": "backendwrapper",
-  "version": "1.0.0",
+  "name": "runnermap",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {

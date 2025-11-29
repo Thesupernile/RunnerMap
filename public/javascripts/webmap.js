@@ -14534,7 +14534,7 @@ function onMapClick(e) {
 	markers.push(newMarker);
 }
 
-function clearPoints() {
+document.getElementById("clearButton").addEventListener("click", function clearPoints() {
 	for (let i = 0; i < markers.length; i++){
 		map.removeLayer(markers[i]);
 	}
@@ -14545,7 +14545,7 @@ function clearPoints() {
 	markers = [];
 	lines = [];
 	routeCoords = [];
-}
+});
 
 map.on('click', onMapClick);
 
