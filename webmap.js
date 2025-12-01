@@ -1,4 +1,5 @@
 var L = require('leaflet');
+const xhr = new XMLHttpRequest();
 
 var routeCoords = [];
 var markers = [];
@@ -30,6 +31,28 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 	markers = [];
 	lines = [];
 	routeCoords = [];
+});
+
+function sendRequest(){
+	xhr.open("POST", "/calculateRoute");
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	const body = JSON.stringify({
+		requiredLength: 0,
+		roundTrip: false,
+		requiredPoints: routeCoords
+	});
+	xhr.onload = () => {
+	if (xhr.readyState == 4 && xhr.status == 200) {
+		console.log(JSON.parse(xhr.responseText));
+	} else {
+		console.log(`Error: ${xhr.status}`);
+	}
+	};
+	xhr.send(body);
+}
+
+document.getElementById("submitButton").addEventListener("click", function clearPoints() {
+	sendRequest();
 });
 
 map.on('click', onMapClick);
