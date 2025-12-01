@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/leaflet.css">
+        <link rel="icon" type="img/png" href="images/favicon.png">
         <title>Runner Map</title>
     </head>
     <body>
@@ -13,11 +14,19 @@
             <p>Route Distance:  XXXkm</p>
             <p>Destinations Required:  XXX</p>
             <p>Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
-            <p>Length Of Route Wanted: <input></input></p>
-            <p>Round Trip? <input type="checkbox"></input></p>
+            <form action="/calculateRoute" method="POST">
+                <label>Length Of Route Wanted:</label>
+                <input type="text" name="requiredLength" value="<%- locals.requiredLength %>"></input>
+                <br>
+                <br>
+                <label>Round Trip? </label>
+                <input type="checkbox" name="roundTrip" value="<%- locals.roundTrip %>"></input>
+                <br>
+                <br>
+                <input type="submit"></input>
+            </form>
             <br>
             <br>
-            <button>Calculate Route</button>
             <p id="ErrorFeedback" style="color: red;"></p>
             <button id="clearButton">Clear Points</button>
 

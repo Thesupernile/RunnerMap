@@ -5,25 +5,14 @@ const path = require("path");
 app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({extended : true}))
 
-app.get("/", (req, res)=>{
-    res.redirect('index.html');
-})
+app.get("/", (req, res) =>{
+    res.render("index.ejs");
+});
+    
+app.post("/calculateRoute", (req, res, next) =>{
+    res.render("index.ejs", {requiredLength : req.body.requiredLength, roundTrip : req.body.roundTrip});
+});
 
-// app.get("/index.css", (req, res)=> {
-//     res.sendFile(path.resolve(__dirname, "views/index.CSS"));
-// })
-
-// app.get("/index.js", (req, res)=> {
-//     res.sendFile(path.resolve(__dirname, "views/index.js"));
-// })
-
-// app.get("/leaflet.css", (req, res)=> {
-//     res.sendFile(path.resolve(__dirname, "node_modules/leaflet/dist/leaflet.css"));
-// })
-
-// app.get("/webmap.js", (req, res)=> {
-//     res.sendFile(path.resolve(__dirname,"webmap.js"));
-// })
-
-app.listen(80);
+app.listen(3000);
