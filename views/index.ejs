@@ -15,16 +15,14 @@
             <p>Destinations Required:  XXX</p>
             <p>Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
             <form action="/calculateRoute" method="POST">
-                <label>Length Of Route Wanted:</label>
-                <input type="text" name="requiredLength" value="<%- locals.requiredLength %>"></input>
+                <label>Length Of Route Wanted: </label>
+                <input type="text" id="requiredLengthInput" name="requiredLength" value="<%- locals.requiredLength %>"></input>
                 <br>
                 <br>
                 <label>Round Trip? </label>
-                <input type="checkbox" name="roundTrip" value="<%- locals.roundTrip %>"></input>
-                <br>
-                <br>
-                <input type="submit"></input>
+                <input type="checkbox" id="isRoundTripInput" name="roundTrip" value="<%- locals.roundTrip %>"></input>
             </form>
+            <br>
             <button id="submitButton"> Create Route </button>
             <br>
             <br>
