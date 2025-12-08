@@ -14547,7 +14547,7 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 });
 
 function sendRequest(requiredRouteLength, isRoundTrip){
-	xhr.open("POST", "/calculateRoute");
+		xhr.open("POST", "/calculateRoute");
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	const body = JSON.stringify({
 		requiredLength: requiredRouteLength,
@@ -14557,7 +14557,6 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 	xhr.onload = () => {
 	if (xhr.readyState == 4 && xhr.status == 200) {
 		response = JSON.parse(xhr.responseText);
-		//response = JSON.parse('{"test" : 15, "requiredPoints": [{"lat":52.18758977414756,"lng":0.13508141040802005},{"lat":52.188332743039304,"lng":0.1358217000961304}]}');
 		console.log(response);
 		
 		routeCoords = response.requiredPoints;
