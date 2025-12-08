@@ -14547,8 +14547,9 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 });
 
 function sendRequest(requiredRouteLength, isRoundTrip){
-		xhr.open("POST", "/calculateRoute");
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.open("POST", "/calculateRoute");
+	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
 	const body = JSON.stringify({
 		requiredLength: requiredRouteLength,
 		roundTrip: isRoundTrip,
