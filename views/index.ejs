@@ -15,7 +15,7 @@
             <p id="numPointsBox">Number of Required:  XXX</p>
             <p id="timeBox">Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
             <form action="/calculateRoute" method="POST">
-                <label>Length Of Route Wanted: </label>
+                <label>Length Of Route Wanted (Zero for Minimum): </label>
                 <input type="text" id="requiredLengthInput" name="requiredLength" value="<%- locals.requiredLength %>"></input>
                 <br>
                 <br>
@@ -26,8 +26,8 @@
             <button id="submitButton"> Create Route </button>
             <br>
             <br>
-            <p id="ErrorFeedback" style="color: red;" value="<%- locals.errorMessage %>"></p>
             <button id="clearButton">Clear Points</button>
+            <p id="ErrorFeedback" style="color: red;" value="<%- locals.errorMessage %>"></p>
 
         </div>
     </body>

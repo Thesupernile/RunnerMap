@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended : false}));
 app.use(express.json());
 
 app.get("/", (req, res) =>{
-    res.render("index.ejs");
+    res.render("index.ejs", {requiredLength : 0});
 });
     
 app.post("/calculateRoute", (req, res, next) =>{

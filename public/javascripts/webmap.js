@@ -1,3 +1,6 @@
+const userErrorBox = document.getElementById("ErrorFeedback");
+
+
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -14546,6 +14549,18 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 	routeCoords = [];
 });
 
+function isStringNumber(string){
+	return !isNaN(string) && !isNaN(parseFloat(string));
+}
+
+function isValidInput(){
+	requiredLength = document.getElementById("requiredLengthInput").value;
+	if (isStringNumber(requiredLength) && requiredLength >= 0){
+		return true;
+	}
+	return false;
+}
+
 function calculateRouteLength(route){
 	// Calculates the route length
 
@@ -14578,29 +14593,36 @@ function updateTextBoxes(response){
 }
 
 function sendRequest(requiredRouteLength, isRoundTrip){
-	xhr.open("POST", "/calculateRoute");
-	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	userErrorBox.innerHTML = " ";
+	if (isValidInput()){
+		xhr.open("POST", "/calculateRoute");
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-	const body = JSON.stringify({
-		requiredLength: requiredRouteLength,
-		roundTrip: isRoundTrip,
-		requiredPoints: routeCoords
-	});
-	xhr.onload = () => {
-	if (xhr.readyState == 4 && xhr.status == 200) {
-		response = JSON.parse(xhr.responseText);
-		console.log(response);
-		
-		routeCoords = response.requiredPoints;
+		const body = JSON.stringify({
+			requiredLength: requiredRouteLength,
+			roundTrip: isRoundTrip,
+			requiredPoints: routeCoords
+		});
+		xhr.onload = () => {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			response = JSON.parse(xhr.responseText);
+			console.log(response);
+			
+			routeCoords = response.requiredPoints;
 
-		route = L.polyline(routeCoords).addTo(map);
-		lines.push(route);
-		updateTextBoxes(response);
-	} else {
-		console.log(`Error: ${xhr.status}`);
+			route = L.polyline(routeCoords).addTo(map);
+			lines.push(route);
+			updateTextBoxes(response);
+		} else {
+			console.log(`Error: ${xhr.status}`);
+			userErrorBox.innerHTML = "An error occured!"
+		}
+		};
+		xhr.send(body);
 	}
-	};
-	xhr.send(body);
+	else{
+		userErrorBox.innerHTML = "Invalid Input!";
+	}
 }
 
 document.getElementById("submitButton").addEventListener("click", function clearPoints() {
