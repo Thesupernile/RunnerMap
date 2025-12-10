@@ -14546,6 +14546,37 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 	routeCoords = [];
 });
 
+function calculateRouteLength(route){
+	// Calculates the route length
+
+	return 0;
+}
+
+function calculateTimeToRun(distance){
+	// Calculates an approximate time to walk/run the route
+	var timeToRun = {
+		"hrs" : 0,
+		"mins" : 0,
+		"secs" : 0
+	};
+
+	return timeToRun;
+}
+
+function updateTextBoxes(response){
+	distanceBox = document.getElementById("distanceBox");
+	numPointsBox = document.getElementById("numPointsBox");
+	timeBox = document.getElementById("timeBox");
+
+	requiredDistance = calculateRouteLength(response.requiredPoints);
+	numPoints = response.requiredPoints.length;
+	timeToRun = calculateTimeToRun(requiredDistance);
+
+	distanceBox.innerHTML = `Calculated Route Distance:  ${requiredDistance}km`;
+	numPointsBox.innerHTML = `Number of Required Destinations:  ${numPoints}`;
+	timeBox.innerHTML = `Approximate Time To Run: ${timeToRun.hrs}hrs ${timeToRun.mins}mins ${timeToRun.secs}secs`;
+}
+
 function sendRequest(requiredRouteLength, isRoundTrip){
 	xhr.open("POST", "/calculateRoute");
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -14564,6 +14595,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 
 		route = L.polyline(routeCoords).addTo(map);
 		lines.push(route);
+		updateTextBoxes(response);
 	} else {
 		console.log(`Error: ${xhr.status}`);
 	}

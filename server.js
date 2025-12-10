@@ -20,7 +20,6 @@ app.post("/calculateRoute", (req, res, next) =>{
         // Send off request to calculate a route
 
         // Send back response to client
-        const testResponse = JSON.parse('{"requiredPoints": [{"lat":52.18758977414756,"lng":0.13508141040802005},{"lat":52.188332743039304,"lng":0.1358217000961304}]}');
         res.send(requestBody);
     }
 });

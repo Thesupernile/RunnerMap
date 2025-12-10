@@ -11,9 +11,9 @@
         <div id="sideBar" class="sideBar">
             <h1>Runner Map V0.2.1</h1>
             <br>
-            <p>Route Distance:  XXXkm</p>
-            <p>Destinations Required:  XXX</p>
-            <p>Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
+            <p id="distanceBox">Calculated Route Distance:  XXXkm</p>
+            <p id="numPointsBox">Number of Required:  XXX</p>
+            <p id="timeBox">Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
             <form action="/calculateRoute" method="POST">
                 <label>Length Of Route Wanted: </label>
                 <input type="text" id="requiredLengthInput" name="requiredLength" value="<%- locals.requiredLength %>"></input>

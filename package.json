@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
+    "buildDep": "cmake-js build",
     "build": "browserify webmap.js -o public/javascripts/webmap.js"
   },
   "repository": {
@@ -22,6 +23,7 @@
   "homepage": "https://github.com/Thesupernile/BackendWrapper#readme",
   "dependencies": {
     "browserify": "^17.0.1",
+    "cmake-js": "^7.4.0",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
     "leaflet": "^1.9.4",
