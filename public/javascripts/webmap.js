@@ -14578,6 +14578,12 @@ function haversine(lat1, lon1, lat2, lon2){
 function calculateRouteLength(route){
 	// Calculates the route length
 	distance = 0;
+	for (let i = 1; i < route.length; i++){
+		let currentNodeCoords = route[i];
+		let previousNodeCoords = route[i-1];
+
+		distance += haversine(previousNodeCoords.lat, previousNodeCoords.lng, currentNodeCoords.lat, currentNodeCoords.lng);
+	}
 
 	// Rounding to 2DP
 	return Math.round(distance * 100) / 100;
@@ -14585,6 +14591,7 @@ function calculateRouteLength(route){
 
 function calculateTimeToRun(distance){
 	// Calculates an approximate time to walk/run the route
+
 	var timeToRun = {
 		"hrs" : 0,
 		"mins" : 0,
