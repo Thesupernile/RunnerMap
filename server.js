@@ -17,7 +17,7 @@ app.post("/calculateRoute", (req, res, next) =>{
     if (requestValid){
         let requestBody = req.body;
         console.log(requestBody);
-        // Send off request to calculate a route
+        // Calculate a route
 
         // Send back response to client
         res.send(requestBody);

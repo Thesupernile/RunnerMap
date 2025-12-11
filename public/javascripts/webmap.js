@@ -14561,10 +14561,26 @@ function isValidInput(){
 	return false;
 }
 
+function haversine(lat1, lon1, lat2, lon2){
+	// Returns (in km) distance between two points
+	const PI = 3.141592;
+	const EARTHRADIUS = 6357;
+
+	const lat1Rad = lat1 * (PI/180);
+	const lat2Rad = lat2 * (PI/180);
+	const lon1Rad = lon1 * (PI/180);
+	const lon2Rad = lon2 * (PI/180);
+
+	let distance = 2 * EARTHRADIUS * Math.asin(Math.sqrt( Math.pow(Math.sin((lat2Rad - lat1Rad)/2), 2) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.pow(Math.sin((lon2Rad - lon1Rad)/2), 2)))
+	return distance
+}
+
 function calculateRouteLength(route){
 	// Calculates the route length
+	distance = 0;
 
-	return 0;
+	// Rounding to 2DP
+	return Math.round(distance * 100) / 100;
 }
 
 function calculateTimeToRun(distance){

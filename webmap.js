@@ -1,9 +1,7 @@
-const { response } = require('express');
 var L = require('leaflet');
 const xhr = new XMLHttpRequest();
 
 var routeCoords = [];
-var lineCoords = [];
 var markers = [];
 var lines = [];
 var map = L.map('map').setView({lon: 0.13488678725880782, lat: 52.18808662172259}, 18);
@@ -33,6 +31,18 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 	routeCoords = [];
 });
 
+function isStringNumber(string){
+	return !isNaN(string) && !isNaN(parseFloat(string));
+}
+
+function isValidInput(){
+	requiredLength = document.getElementById("requiredLengthInput").value;
+	if (isStringNumber(requiredLength) && requiredLength >= 0){
+		return true;
+	}
+	return false;
+}
+
 function calculateRouteLength(route){
 	// Calculates the route length
 
@@ -41,8 +51,13 @@ function calculateRouteLength(route){
 
 function calculateTimeToRun(distance){
 	// Calculates an approximate time to walk/run the route
+	var timeToRun = {
+		"hrs" : 0,
+		"mins" : 0,
+		"secs" : 0
+	};
 
-	return 0;
+	return timeToRun;
 }
 
 function updateTextBoxes(response){
@@ -56,33 +71,40 @@ function updateTextBoxes(response){
 
 	distanceBox.innerHTML = `Calculated Route Distance:  ${requiredDistance}km`;
 	numPointsBox.innerHTML = `Number of Required Destinations:  ${numPoints}`;
-	timeBox.innerHTML = `Approximate Time To Run: ${XXX}hrs ${XXX}mins ${XXX}secs`;
+	timeBox.innerHTML = `Approximate Time To Run: ${timeToRun.hrs}hrs ${timeToRun.mins}mins ${timeToRun.secs}secs`;
 }
 
 function sendRequest(requiredRouteLength, isRoundTrip){
-	xhr.open("POST", "/calculateRoute");
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	const body = JSON.stringify({
-		requiredLength: requiredRouteLength,
-		roundTrip: isRoundTrip,
-		requiredPoints: routeCoords
-	});
-	xhr.onload = () => {
-	if (xhr.readyState == 4 && xhr.status == 200) {
-		response = JSON.parse(xhr.responseText);
-		console.log(response);
-		
-		routeCoords = response.requiredPoints;
+	userErrorBox.innerHTML = " ";
+	if (isValidInput()){
+		xhr.open("POST", "/calculateRoute");
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-		route = L.polyline(routeCoords).addTo(map);
-		lines.push(route);
-		updateTextBoxes(response);
+		const body = JSON.stringify({
+			requiredLength: requiredRouteLength,
+			roundTrip: isRoundTrip,
+			requiredPoints: routeCoords
+		});
+		xhr.onload = () => {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			response = JSON.parse(xhr.responseText);
+			console.log(response);
+			
+			routeCoords = response.requiredPoints;
 
-	} else {
-		console.log(`Error: ${xhr.status}`);
+			route = L.polyline(routeCoords).addTo(map);
+			lines.push(route);
+			updateTextBoxes(response);
+		} else {
+			console.log(`Error: ${xhr.status}`);
+			userErrorBox.innerHTML = "An error occured!"
+		}
+		};
+		xhr.send(body);
 	}
-	};
-	xhr.send(body);
+	else{
+		userErrorBox.innerHTML = "Invalid Input!";
+	}
 }
 
 document.getElementById("submitButton").addEventListener("click", function clearPoints() {
