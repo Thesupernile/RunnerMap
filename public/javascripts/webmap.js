@@ -14591,12 +14591,24 @@ function calculateRouteLength(route){
 
 function calculateTimeToRun(distance){
 	// Calculates an approximate time to walk/run the route
+	const walkSpeedHrs = 4.8;		// Speed in km/h (this is an average from the internet)
+	const walkSpeedMins = walkSpeedHrs / 60;
+	const walkSpeedSecs = walkSpeedMins / 60;
 
 	var timeToRun = {
 		"hrs" : 0,
 		"mins" : 0,
 		"secs" : 0
 	};
+
+	// Calculate the hours
+	timeToRun.hrs = Math.floor(distance / walkSpeedHrs);
+	distance = distance - (timeToRun.hrs * walkSpeedHrs);
+	// Calculate the minutes
+	timeToRun.mins = Math.floor(distance / walkSpeedMins);
+	distance = distance - (timeToRun.mins * walkSpeedMins);
+	// Calculate the seconds
+	timeToRun.secs = Math.round(distance / walkSpeedSecs);
 
 	return timeToRun;
 }
