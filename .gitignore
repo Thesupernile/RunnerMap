@@ -2,3 +2,21 @@
 /node_modules
 
 *.txt
+/.vscode
+/.vs
+/build
+/mapData
+/out
+/_deps
+/Personal Notes
+/zlib
+/include
+/node_modules
+
+*.exe
+*.ilk
+*.pdb
+*.zip
+filePathDef.cpp
+package.json
+package-lock.json

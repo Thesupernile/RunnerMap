@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const addon = require('bindings')('MappingComponent');
+
+console.log(addon.CalculateRoute());
 
 app.set('view engine', 'ejs');
 
