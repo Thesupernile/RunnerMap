@@ -14629,6 +14629,9 @@ function updateTextBoxes(response){
 
 function sendRequest(requiredRouteLength, isRoundTrip){
 	userErrorBox.innerHTML = " ";
+	if (isRoundTrip){
+		routeCoords.push(routeCoords[0]);
+	}
 	if (isValidInput()){
 		xhr.open("POST", "/calculateRoute");
 		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
