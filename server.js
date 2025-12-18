@@ -1,9 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const addon = require('bindings')('MappingComponent');
-
-console.log(addon.CalculateRoute());
+const MappingComponent = require('bindings')('MappingComponent');
 
 app.set('view engine', 'ejs');
 
@@ -21,7 +19,7 @@ app.post("/calculateRoute", (req, res, next) =>{
         let requestBody = req.body;
         console.log(requestBody);
         // Calculate a route
-
+        console.log(MappingComponent.CalculateRoute());
         // Send back response to client
         res.send(requestBody);
     }

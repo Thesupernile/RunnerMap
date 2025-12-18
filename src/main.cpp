@@ -1,7 +1,6 @@
 #include "filepathDef.cpp"
 #include "main.hpp"
 #include "HTTPRequestHandler.cpp"
-#include "network.hpp"
 
 // Include relevant osmium libraries
 #include <osmium/io/pbf_input.hpp>
