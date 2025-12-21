@@ -1,29 +1,7 @@
-#include <string>
 #include <node_api.h> 
-// #include "network.hpp"
-#include "tests/testData.hpp"
+#include "JSONConversion.cpp"
 
-std::string convertRouteToJSON(route inputRoute){
-    std::string testString = "{\"requiredPoints\":[{\"lat\":52.18759634914795,\"lng\":0.13465762138366702},{\"lat\":52.188398491900806,\"lng\":0.13573586940765384}]}";
-    std::string JSONOutput = "{\"requiredPoints\":[";
-    int counter = 0;
-    for (auto junction : inputRoute.getRoute()){
-        JSONOutput += "{\"lat\":";
-        JSONOutput += junction.lat;
-        JSONOutput += ",\"lng\":";
-        JSONOutput += junction.lon;
-        counter++;
-        JSONOutput += "}";
-        if (counter != inputRoute.getRoute().size()){
-            JSONOutput += ",";
-        }
-    }
-
-    JSONOutput = JSONOutput + "]}";
-    return testString;
-}
-
-napi_value SendHTTPRequest(napi_env env, napi_callback_info info){
+napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     napi_status status;
     size_t argc = 1;
     napi_value args[1];
@@ -37,12 +15,25 @@ napi_value SendHTTPRequest(napi_env env, napi_callback_info info){
     }
 
     napi_valuetype arg1Type;
-    status = napi_typeof(env, args[1], &arg1Type);
+    status = napi_typeof(env, args[0], &arg1Type);
     if (arg1Type != napi_string){
         napi_throw_type_error(env, NULL, "Argument has invalid type");
         return NULL;
     }
+
     // Convert the argument into a usable format
+    size_t stringLength;
+    status = napi_get_value_string_utf8(env, args[0], NULL, NULL, &stringLength);
+    char* requiredPointsStr = (char*)malloc(stringLength + 1);
+    status = napi_get_value_string_utf8(env, args[0], requiredPointsStr, stringLength + 1, NULL);
+
+
+    std::vector<junction> reqPointsList = std::vector<junction>();
+
+    //convertJSONToRoute(requiredPointsStr, std::make_shared<std::vector<junction>>(reqPointsList));
+    //free(requiredPointsStr);
+
+    // Create the network
     
 
     // Calculate the route
@@ -50,6 +41,8 @@ napi_value SendHTTPRequest(napi_env env, napi_callback_info info){
 
     // Return the route
     std::string testValue = convertRouteToJSON(testRoute);
+    testValue = requiredPointsStr;
+    free(requiredPointsStr);
 
     status = napi_create_string_utf8(env, testValue.c_str(), testValue.length(), &testReturn);
 
@@ -58,7 +51,7 @@ napi_value SendHTTPRequest(napi_env env, napi_callback_info info){
 
 napi_value Init(napi_env env, napi_value exports) {
     napi_status status;
-    napi_property_descriptor desc = { "CalculateRoute", NULL, SendHTTPRequest, NULL, NULL, NULL, napi_configurable, NULL };
+    napi_property_descriptor desc = { "CalculateRoute", NULL, JavaScriptBindings, NULL, NULL, NULL, napi_configurable, NULL };
     status = napi_define_properties(env, exports, 1, &desc);
     if (status != napi_ok) return NULL;
     return exports;

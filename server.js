@@ -19,7 +19,7 @@ app.post("/calculateRoute", (req, res, next) =>{
         let requestBody = req.body;
         console.log(requestBody);
         // Calculate a route
-        console.log(MappingComponent.CalculateRoute(requestBody));
+        console.log(MappingComponent.CalculateRoute(JSON.stringify(requestBody.requiredPoints)));
         // Send back response to client
         res.send(requestBody);
     }
