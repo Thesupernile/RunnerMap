@@ -1,3 +1,6 @@
+#ifndef NETWORK_CPP
+#define NETWORK_CPP
+
 #include "route.cpp"
 #include <memory>
 
@@ -229,3 +232,5 @@ Nodes will need an ID in order to differentiate them
 They will also store thier own latitude and longtitude so can be easily plotted on the map
 
 */
+
+#endif

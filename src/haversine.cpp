@@ -1,3 +1,6 @@
+#ifndef HAVERSINE_CPP
+#define HAVERSINE_CPP
+
 #include <cmath>
 
 double haversine(double lat1, double lon1, double lat2, double lon2){
@@ -14,3 +17,5 @@ double haversine(double lat1, double lon1, double lat2, double lon2){
     
     return distance;
 }
+
+#endif

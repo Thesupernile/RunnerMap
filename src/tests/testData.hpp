@@ -1,3 +1,6 @@
+#ifndef TESTDATA_HPP
+#define TESTDATA_HPP
+
 #include <vector>
 #include "../network.hpp"
 
@@ -87,3 +90,4 @@ const struct{
     double expectedDLSRouteLength = 2308;
 } testData;
 
+#endif

@@ -1,5 +1,5 @@
-#include "NetworkTests.cpp"
-
+#include <gtest/gtest.h>
+#include "../haversine.cpp"
 #include <iomanip>
 #include <sstream>
 
