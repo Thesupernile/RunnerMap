@@ -28,21 +28,17 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     status = napi_get_value_string_utf8(env, args[0], requiredPointsStr, stringLength + 1, NULL);
 
 
-    std::vector<junction> reqPointsList = std::vector<junction>();
-
-    //convertJSONToRoute(requiredPointsStr, std::make_shared<std::vector<junction>>(reqPointsList));
-    //free(requiredPointsStr);
+    std::shared_ptr<std::vector<junction>> reqPointsListPtr = convertJSONToRoute(requiredPointsStr);
+    free(requiredPointsStr);
 
     // Create the network
     
-
     // Calculate the route
     route testRoute = route();
+    testRoute.setRoute(*reqPointsListPtr);
 
     // Return the route
     std::string testValue = convertRouteToJSON(testRoute);
-    testValue = requiredPointsStr;
-    free(requiredPointsStr);
 
     status = napi_create_string_utf8(env, testValue.c_str(), testValue.length(), &testReturn);
 
