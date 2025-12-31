@@ -8,9 +8,9 @@ std::string convertRouteToJSON(route inputRoute){
     int counter = 0;
     for (auto junction : inputRoute.getRoute()){
         JSONOutput += "{\"lat\":";
-        JSONOutput += junction.lat;
+        JSONOutput += std::to_string(junction.lat);
         JSONOutput += ",\"lng\":";
-        JSONOutput += junction.lon;
+        JSONOutput += std::to_string(junction.lon);
         counter++;
         JSONOutput += "}";
         if (counter != inputRoute.getRoute().size()){
@@ -25,5 +25,27 @@ std::string convertRouteToJSON(route inputRoute){
 
 void convertJSONToRoute(std::string JSON, std::shared_ptr<std::vector<junction>> reqPointsPtr){
     // Super simple conversion from list of required points as JSON into a list of required points
-    
+    int extractedNumCount = 0;
+    std::string temp;
+    for (int i = 0; i < JSON.length(); i++){
+        // Check the second param is actually a number
+        if (JSON[i] == ':' && JSON[i+1] >= 48 && JSON[i+1] <= 57){
+            // Extract the number between the colon and the comma (or } ) (which is by standard the value of the paramater)
+            for (int j = i + 1; j < JSON.length(); j++){
+                if (JSON[j] == ',' || JSON[j] == '}'){
+                    temp = JSON.substr(i+1, j-i);
+                    if (extractedNumCount % 2 == 0){
+                        junction newJunction = junction();
+                        newJunction.lat = stoi(temp);
+                        reqPointsPtr->push_back(newJunction);
+                    }
+                    else{
+                        int currentJunctionIndex = floor(extractedNumCount / 2);
+                        (*reqPointsPtr)[currentJunctionIndex].lon = stoi(temp);
+                    }
+                }
+            }
+        }
+    }
+
 }

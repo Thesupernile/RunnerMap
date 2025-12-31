@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "build": "cmake-js build",
+    "buildDebug": "cmake-js build --debug",
     "buildJvs": "browserify webmap.js -o public/javascripts/webmap.js"
   },
   "repository": {
