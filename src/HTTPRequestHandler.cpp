@@ -1,11 +1,11 @@
-#include <node_api.h> 
-#include "JSONConversion.cpp"
+#include <node_api.h>
+#include "ProcessRoute.cpp"
 
 napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     napi_status status;
     size_t argc = 1;
     napi_value args[1];
-    napi_value testReturn;
+    napi_value returnValue;
 
     // Check that the argument is valid
     status = napi_get_cb_info(env, info, &argc, args, NULL, NULL);
@@ -27,22 +27,13 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     char* requiredPointsStr = (char*)malloc(stringLength + 1);
     status = napi_get_value_string_utf8(env, args[0], requiredPointsStr, stringLength + 1, NULL);
 
-
-    std::shared_ptr<std::vector<junction>> reqPointsListPtr = convertJSONToRoute(requiredPointsStr);
+    // Calculate the route
+    std::string JSONToReturn = ProcessRoute(requiredPointsStr);
     free(requiredPointsStr);
 
-    // Create the network
-    
-    // Calculate the route
-    route testRoute = route();
-    testRoute.setRoute(*reqPointsListPtr);
+    status = napi_create_string_utf8(env, JSONToReturn.c_str(), JSONToReturn.length(), &returnValue);
 
-    // Return the route
-    std::string testValue = convertRouteToJSON(testRoute);
-
-    status = napi_create_string_utf8(env, testValue.c_str(), testValue.length(), &testReturn);
-
-    return testReturn;
+    return returnValue;
 };
 
 napi_value Init(napi_env env, napi_value exports) {

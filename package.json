@@ -8,6 +8,7 @@
     "start": "nodemon server.js",
     "build": "cmake-js build",
     "buildDebug": "cmake-js build --debug",
+    "debug": "cmake-js build --debug",
     "buildJvs": "browserify webmap.js -o public/javascripts/webmap.js"
   },
   "repository": {

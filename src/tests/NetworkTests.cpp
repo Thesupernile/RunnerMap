@@ -12,7 +12,7 @@ TEST(Routefinding, AStarSearch){
         testData.junctions[testData.endJunctionIndex]
     }};
 
-    std::unique_ptr<route> calculatedRoute = testNetwork.calculateRoute(std::make_unique<std::vector<junction>>(testRouteRequiredJunctions));
+    std::unique_ptr<route> calculatedRoute = testNetwork.calculateRoute(std::make_shared<std::vector<junction>>(testRouteRequiredJunctions));
 
     std::vector<junction> returnedRoute = calculatedRoute->getRoute();
     
@@ -68,6 +68,6 @@ TEST(GeoMapping, FindNodeByLocation){
         testNetwork.addJunction(junction);
     }
 
-    std::uint64_t returnedJunctionId = testNetwork.getClosestJunction(TESTLAT, TESTLON);
+    std::uint64_t returnedJunctionId = testNetwork.getClosestJunctionId(TESTLAT, TESTLON);
     EXPECT_EQ(returnedJunctionId, EXPECTEDJUNCTIONID);
 }

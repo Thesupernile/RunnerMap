@@ -1,3 +1,6 @@
+#ifndef JSONCONVERSION_CPP
+#define JSONCONVERSION_CPP
+
 // #include "network.hpp"
 #include "tests/testData.hpp"
 #include <string>
@@ -26,7 +29,7 @@ std::string convertRouteToJSON(route inputRoute){
 std::shared_ptr<std::vector<junction>> convertJSONToRoute(std::string JSON){
     // Super simple conversion from list of required points as JSON into a list of required points
     std::vector<junction> requiredPoints {};
-    std::shared_ptr reqPointsPtr = std::make_shared<std::vector<junction>>(requiredPoints);
+    std::shared_ptr<std::vector<junction>> reqPointsPtr = std::make_shared<std::vector<junction>>(requiredPoints);
     
     int extractedNumCount = 0;
     std::string numStr;
@@ -57,3 +60,4 @@ std::shared_ptr<std::vector<junction>> convertJSONToRoute(std::string JSON){
     
     return reqPointsPtr;
 }
+#endif

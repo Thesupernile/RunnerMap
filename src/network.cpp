@@ -196,7 +196,7 @@ class network : public nodeObject{
             route->reverseRoute();
         }
 
-        std::uint64_t getClosestJunction(double lat, double lon){
+        std::uint64_t getClosestJunctionId(double lat, double lon){
             std::uint64_t junctionId {};
             junctionId = nodeList.getJunctionByPosition(lat, lon);
 
@@ -204,16 +204,16 @@ class network : public nodeObject{
         }
 
 
-        std::unique_ptr<route> calculateRoute(std::unique_ptr<std::vector<junction>> requiredJunctions){
+        std::unique_ptr<route> calculateRoute(std::shared_ptr<std::vector<junction>> requiredJunctions){
             route fullRoute {};
             std::unique_ptr<route> subroute;
             std::vector<junction> fullRouteRoute = fullRoute.getRoute();
 
             for (int i = 0; i < requiredJunctions->size() - 1; i++){
-                std::shared_ptr<junction> currentJunction = std::make_shared<junction>((*requiredJunctions)[i]);
-                std::shared_ptr<junction> nextJunction = std::make_shared<junction>((*requiredJunctions)[i+1]);
+                std::shared_ptr<junction> currentJunctionPtr = std::make_shared<junction>((*requiredJunctions)[i]);
+                std::shared_ptr<junction> nextJunctionPtr = std::make_shared<junction>((*requiredJunctions)[i+1]);
 
-                subroute = astar(currentJunction, nextJunction, 0);
+                subroute = std::move(astar(currentJunctionPtr, nextJunctionPtr));
                 std::vector<junction> subrouteRoute = subroute->getRoute();
 
                 fullRouteRoute.insert(fullRouteRoute.end(), subrouteRoute.begin(), subrouteRoute.end());

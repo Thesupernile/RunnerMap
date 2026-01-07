@@ -104,7 +104,7 @@ route getRoute(std::vector<location> requiredPoints){
 
     std::vector<junction> requiredJunctions {};
     for (location point : requiredPoints){
-        std::uint64_t junctionId = map.getClosestJunction(point.lat, point.lon);
+        std::uint64_t junctionId = map.getClosestJunctionId(point.lat, point.lon);
         requiredJunctions.push_back(map.getJunction(junctionId));
     }
     
