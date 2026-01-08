@@ -14536,16 +14536,20 @@ function onMapClick(e) {
 	markers.push(newMarker);
 }
 
+function clearLines(){
+	for (let i = 0; i < lines.length; i++){
+		map.removeLayer(lines[i]);
+	}
+	lines = [];
+}
+
 document.getElementById("clearButton").addEventListener("click", function clearPoints() {
 	for (let i = 0; i < markers.length; i++){
 		map.removeLayer(markers[i]);
 	}
-	for (let i = 0; i < lines.length; i++){
-		map.removeLayer(lines[i]);
-	}
+	clearLines();
 	
 	markers = [];
-	lines = [];
 	routeCoords = [];
 });
 
@@ -14648,6 +14652,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 			
 			routeCoords = response.requiredPoints;
 
+			clearLines();
 			route = L.polyline(routeCoords).addTo(map);
 			lines.push(route);
 			updateTextBoxes(response);
