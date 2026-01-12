@@ -1,13 +1,17 @@
 #include <string>
 #include "tests/testData.hpp"
 #include "JSONConversion.cpp"
+#include "fileReader.cpp"
 
 std::string ProcessRoute(std::string requiredPointsJSON){
     std::shared_ptr<std::vector<junction>> reqPointsListPtr = std::move(convertJSONToRoute(requiredPointsJSON));
 
     // Create the network
-    // TEMP CODE
     network map {};     // Network object used for testing
+    // fileReader reader;
+    // reader.readMapData(&map);
+
+    // TEMP CODE
     for (auto junction : testData.junctions){
         map.addJunction(junction);
     }
