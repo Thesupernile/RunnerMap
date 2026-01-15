@@ -1,5 +1,6 @@
 #include "haversine.cpp"
 #include <vector>
+#include <fstream>
 #include <tuple>
 #include <stdexcept>
 #include <cstdint>
@@ -13,9 +14,14 @@ struct connection{
         connectedNodeId = initConnectedNodeId;
         connectionLength = initConnectionLength;
     }
+
+    connection(){
+
+    }
 };
 
-struct junction{
+class junction{
+    public:
     std::uint64_t id    {0};                        // Unique node identifier
     double lat          {0};                        // Latitude of the node
     double lon          {0};                        // Longtitude of the node
@@ -25,6 +31,50 @@ struct junction{
         lat = initLat;
         lon = initLon;
         connectionsList = initConnectionsList;
+    }
+
+    void storeAsBinary(std::ofstream *fileWriter){
+        fileWriter->write(reinterpret_cast<const char*>(&id), sizeof &id);
+        fileWriter->write(reinterpret_cast<const char*>(&lat), sizeof &lat);
+        fileWriter->write(reinterpret_cast<const char*>(&lon), sizeof &lon);
+
+        size_t connectionListLen = connectionsList.size();
+        fileWriter->write(reinterpret_cast<const char*>(&connectionListLen), sizeof &connectionListLen);
+        for (size_t i = 0; i < connectionListLen; i++){
+            connection connectionToWrite = connectionsList[i];
+            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectedNodeId)), sizeof &(connectionToWrite.connectedNodeId));
+            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectionLength)), sizeof &(connectionToWrite.connectionLength));
+        }
+    }
+
+    void readFromBinary(std::ifstream *fileReader){
+        int newId;
+        double newLat;
+        double newLon;
+        std::vector<connection> newConnectionsList;
+
+        fileReader->read(reinterpret_cast<char*>(&newId), sizeof &newId);
+        fileReader->read(reinterpret_cast<char*>(&newLat), sizeof &newLat);
+        fileReader->read(reinterpret_cast<char*>(&newLon), sizeof &newLon);
+
+
+        size_t connectionListLen;
+        fileReader->read(reinterpret_cast<char*>(&connectionListLen), sizeof &connectionListLen);
+        for (size_t i = 0; i < connectionListLen; i++){
+            int connectedNodeId;
+            double connectionLen;
+
+            fileReader->read(reinterpret_cast<char*>(&connectedNodeId), sizeof &connectedNodeId);
+            fileReader->read(reinterpret_cast<char*>(&connectionLen), sizeof &connectionLen);
+            connection newConnection = connection(connectedNodeId, connectionLen);
+            newConnectionsList.push_back(newConnection);
+        }
+
+        // Set attributes of this junction to those of the junction read
+        id = newId;
+        lat = newLat;
+        lon = newLon;
+        connectionsList = newConnectionsList;
     }
 };  
 
@@ -126,5 +176,32 @@ class junctionHashMap{
             }
 
             return bestJunctionId;
+        }
+
+        void storeAsBinary(std::ofstream *fileWriter){
+            // Writes each element of the hashMap to binary using the fileReader passed in (as pointer)
+            for (int i = 0; i < CAPACITY; i++){
+                std::vector<junction> *keyLine = &(mapList[i]);
+                size_t keyLineSize = keyLine->size();
+                fileWriter->write(reinterpret_cast<const char*>(&keyLineSize), sizeof &keyLineSize);
+                for (int j = 0; j < keyLine->size(); j++){
+                    junction* junctionPtr = &((*keyLine)[j]);
+                    junctionPtr->storeAsBinary(fileWriter);
+                }
+            }
+        }
+
+        void readFromBinary(std::ifstream *fileReader){
+            // Reads each element of the hashMap from binary using the fileReader passed in (as pointer)
+            for (int i = 0; i < CAPACITY; i++){
+                std::vector<junction> *keyLine = &(mapList[i]);
+                size_t lineLength;
+                fileReader->read(reinterpret_cast<char*>(&lineLength), sizeof &lineLength);
+                for (int j = 0; j < lineLength; j++){
+                    junction junctionRead;
+                    junctionRead.readFromBinary(fileReader);
+                    keyLine->push_back(junctionRead);
+                }
+            }
         }
 };
