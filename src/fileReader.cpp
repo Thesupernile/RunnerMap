@@ -9,25 +9,41 @@ class fileReader{
     private:
     std::string filePath;
 
-    public:
-    fileReader(std::string newFilePath = "mapData/"){
-        filePath = newFilePath;
-    }
-
-    void writeMapData(network* map){
-
-    }
-
-    void extractDataFromOSMFile(){
+    void extractDataFromOSMFile(network* mapPtr){
         network map = network();
-
-
+        
         writeMapData(&map);
     }
 
-    void readMapData(network* mapPtr){
-        
+    public:
 
+    fileReader(std::string newFilePath = "C:/Programming/NEA/Frontend/mapData/"){
+        filePath = newFilePath;
+    }
+
+    void writeMapData(network* mapPtr){
+        std::ofstream writer(filePath + "mapData.bin", std::ios::binary);
+        mapPtr->storeAsBinary(&writer);
+
+        writer.close();
+    }
+
+    void readMapData(network* mapPtr){
+        std::ifstream reader(filePath + "mapData.bin", std::ios::binary);
+
+        mapPtr->readFromBinary(&reader);
+
+        reader.close();
+    }
+
+    void getStoredMap(network* mapPtr){
+        // Try to read from the mapping file. If this fails, we read from the raw OSM file
+        try{
+            readMapData(mapPtr);
+        }
+        catch(int errorCode){
+            extractDataFromOSMFile(mapPtr);
+        }
     }
 
 };

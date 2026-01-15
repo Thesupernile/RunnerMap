@@ -2,3 +2,4 @@
 #include "JSONConversionTests.cpp"
 #include "NetworkTests.cpp"
 #include "ProcessRouteTest.cpp"
+#include "fileReaderTests.cpp"

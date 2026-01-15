@@ -48,32 +48,24 @@ class junction{
     }
 
     void readFromBinary(std::ifstream *fileReader){
-        int newId;
-        double newLat;
-        double newLon;
         std::vector<connection> newConnectionsList;
 
-        fileReader->read(reinterpret_cast<char*>(&newId), sizeof &newId);
-        fileReader->read(reinterpret_cast<char*>(&newLat), sizeof &newLat);
-        fileReader->read(reinterpret_cast<char*>(&newLon), sizeof &newLon);
+        fileReader->read(reinterpret_cast<char*>(&id), sizeof &id);
+        fileReader->read(reinterpret_cast<char*>(&lat), sizeof &lat);
+        fileReader->read(reinterpret_cast<char*>(&lon), sizeof &lon);
 
 
         size_t connectionListLen;
         fileReader->read(reinterpret_cast<char*>(&connectionListLen), sizeof &connectionListLen);
         for (size_t i = 0; i < connectionListLen; i++){
-            int connectedNodeId;
-            double connectionLen;
+            connection newConnection = connection();
 
-            fileReader->read(reinterpret_cast<char*>(&connectedNodeId), sizeof &connectedNodeId);
-            fileReader->read(reinterpret_cast<char*>(&connectionLen), sizeof &connectionLen);
-            connection newConnection = connection(connectedNodeId, connectionLen);
+            fileReader->read(reinterpret_cast<char*>(&newConnection.connectedNodeId), sizeof &newConnection.connectedNodeId);
+            fileReader->read(reinterpret_cast<char*>(&newConnection.connectionLength), sizeof &newConnection.connectionLength);
             newConnectionsList.push_back(newConnection);
         }
 
         // Set attributes of this junction to those of the junction read
-        id = newId;
-        lat = newLat;
-        lon = newLon;
         connectionsList = newConnectionsList;
     }
 };  

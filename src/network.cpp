@@ -3,6 +3,7 @@
 
 #include "route.cpp"
 #include <memory>
+#include <fstream>
 
 class network : public nodeObject{
     private:
@@ -221,6 +222,17 @@ class network : public nodeObject{
             }
             fullRoute.setRoute(fullRouteRoute);
             return std::make_unique<route>(fullRoute);
+        }
+
+        void storeAsBinary(std::ofstream *fileWriter){
+            nodeList.storeAsBinary(fileWriter);
+        }
+
+        void readFromBinary(std::ifstream *fileWriter){
+            junctionHashMap newNodeList;
+
+            newNodeList.readFromBinary(fileWriter);
+            nodeList = newNodeList;
         }
 
 };

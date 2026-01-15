@@ -8,14 +8,8 @@ std::string ProcessRoute(std::string requiredPointsJSON){
 
     // Create the network
     network map {};     // Network object used for testing
-    // fileReader reader;
-    // reader.readMapData(&map);
-
-    // TEMP CODE
-    for (auto junction : testData.junctions){
-        map.addJunction(junction);
-    }
-    // END TEMP CODE
+    fileReader reader;
+    reader.getStoredMap(&map);
 
     // Convert to a list of points in the map
     for (int i = 0; i < reqPointsListPtr->size(); i++){
