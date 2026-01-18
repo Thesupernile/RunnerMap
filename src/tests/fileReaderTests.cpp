@@ -8,7 +8,7 @@ TEST (FileManipulation, ReadWriteSequence){
         testNetwork.addJunction(junction);
     }
 
-    fileReader fr = fileReader();
+    fileReader fr = fileReader("C:/Programming/NEA/Frontend/mapData/testing/");
     fr.writeMapData(&testNetwork);
 
 

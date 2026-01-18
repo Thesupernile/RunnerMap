@@ -24,6 +24,10 @@ class network : public nodeObject{
             addJunction(newNode);
         }
 
+        bool isEmpty(){
+            return nodeList.isEmpty();
+        }
+
         void addJunction(junction newNode){
             nodeList.insertValue(newNode);
         }

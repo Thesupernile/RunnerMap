@@ -72,8 +72,9 @@ class junction{
 
 class junctionHashMap{
     // An open hashed container used to store nodes
-    public:
+    private:
         static const int CAPACITY = 9311;           // 9311 chosen since it is a large prime
+        int numJunctions {};
         std::vector<junction> mapList[CAPACITY];
 
 
@@ -81,10 +82,16 @@ class junctionHashMap{
             // TK INSERT A REAL HASH FUNCTION
             return key % CAPACITY;
         }
-
     public:
         junctionHashMap(){
 
+        }
+
+        bool isEmpty(){
+            if (numJunctions == 0){
+                return true;
+            }
+            return false;
         }
 
         void insertValue(junction value){
@@ -95,6 +102,7 @@ class junctionHashMap{
             std::vector<junction> *keyLine = &(mapList[index]);
             if (keyLine->size() < 1){
                 keyLine->push_back(value);
+                numJunctions++;
             }
             else{
                 bool keyFound = false;
@@ -106,6 +114,7 @@ class junctionHashMap{
                 }
                 if (!keyFound){
                     keyLine->push_back(value);
+                    numJunctions++;
                 }
             }
 
@@ -113,6 +122,8 @@ class junctionHashMap{
 
         bool containsKey(std::uint64_t targetKey){
             // Used to check if the hashmap contains the given key
+            if (numJunctions == 0){ return false; }
+
             std::uint64_t index = hash(targetKey);
             std::vector<junction> *keyLine = &(mapList[index]);
             for (auto &key : *keyLine){
@@ -131,6 +142,7 @@ class junctionHashMap{
                 for (int j = 0; j < keyLine->size(); j++){
                     if (((*keyLine)[j]).connectionsList.size() < 1){
                         keyLine->erase (keyLine->begin()+j);
+                        numJunctions--;
                         j--;
                     }
                 }
@@ -155,6 +167,7 @@ class junctionHashMap{
             // Uses a linear search to find the closest junction to the input coords
             double shortestDistance = INFINITY;
             std::uint64_t bestJunctionId {};
+            if (isEmpty()){ throw std::invalid_argument("Map is empty"); }
 
             for (int i = 0; i < CAPACITY; i++){
                 std::vector<junction> *keyLine = &(mapList[i]);
@@ -193,6 +206,7 @@ class junctionHashMap{
                     junction junctionRead;
                     junctionRead.readFromBinary(fileReader);
                     keyLine->push_back(junctionRead);
+                    numJunctions++;
                 }
             }
         }

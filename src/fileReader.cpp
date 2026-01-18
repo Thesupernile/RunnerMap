@@ -39,12 +39,7 @@ class fileReader{
 
     void getStoredMap(network* mapPtr){
         // Try to read from the mapping file. If this fails, we read from the raw OSM file
-        // TEMP CODE
-        extractDataFromOSMFile(mapPtr);
-        // END TEMP CODE
-
         // NOTE: Something weird happening when binary file is empty
-
         try{
             readMapData(mapPtr);
         }

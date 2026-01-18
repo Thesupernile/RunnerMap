@@ -32,7 +32,6 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
         // TODO Convert this function to use a pointer as a parameter
         JSONToReturn = convertRouteToJSON(*dlsRoutePtr);
     }
-    JSONToReturn = "";
     delete(map);
 
     return JSONToReturn;
