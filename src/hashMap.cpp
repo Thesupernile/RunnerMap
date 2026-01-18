@@ -34,34 +34,34 @@ class junction{
     }
 
     void storeAsBinary(std::ofstream *fileWriter){
-        fileWriter->write(reinterpret_cast<const char*>(&id), sizeof &id);
-        fileWriter->write(reinterpret_cast<const char*>(&lat), sizeof &lat);
-        fileWriter->write(reinterpret_cast<const char*>(&lon), sizeof &lon);
+        fileWriter->write(reinterpret_cast<const char*>(&id), sizeof id);
+        fileWriter->write(reinterpret_cast<const char*>(&lat), sizeof lat);
+        fileWriter->write(reinterpret_cast<const char*>(&lon), sizeof lon);
 
         size_t connectionListLen = connectionsList.size();
-        fileWriter->write(reinterpret_cast<const char*>(&connectionListLen), sizeof &connectionListLen);
+        fileWriter->write(reinterpret_cast<const char*>(&connectionListLen), sizeof connectionListLen);
         for (size_t i = 0; i < connectionListLen; i++){
             connection connectionToWrite = connectionsList[i];
-            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectedNodeId)), sizeof &(connectionToWrite.connectedNodeId));
-            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectionLength)), sizeof &(connectionToWrite.connectionLength));
+            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectedNodeId)), sizeof (connectionToWrite.connectedNodeId));
+            fileWriter->write(reinterpret_cast<const char*>(&(connectionToWrite.connectionLength)), sizeof (connectionToWrite.connectionLength));
         }
     }
 
     void readFromBinary(std::ifstream *fileReader){
         std::vector<connection> newConnectionsList;
 
-        fileReader->read(reinterpret_cast<char*>(&id), sizeof &id);
-        fileReader->read(reinterpret_cast<char*>(&lat), sizeof &lat);
-        fileReader->read(reinterpret_cast<char*>(&lon), sizeof &lon);
+        fileReader->read(reinterpret_cast<char*>(&id), sizeof id);
+        fileReader->read(reinterpret_cast<char*>(&lat), sizeof lat);
+        fileReader->read(reinterpret_cast<char*>(&lon), sizeof lon);
 
 
         size_t connectionListLen;
-        fileReader->read(reinterpret_cast<char*>(&connectionListLen), sizeof &connectionListLen);
+        fileReader->read(reinterpret_cast<char*>(&connectionListLen), sizeof connectionListLen);
         for (size_t i = 0; i < connectionListLen; i++){
             connection newConnection = connection();
 
-            fileReader->read(reinterpret_cast<char*>(&newConnection.connectedNodeId), sizeof &newConnection.connectedNodeId);
-            fileReader->read(reinterpret_cast<char*>(&newConnection.connectionLength), sizeof &newConnection.connectionLength);
+            fileReader->read(reinterpret_cast<char*>(&newConnection.connectedNodeId), sizeof newConnection.connectedNodeId);
+            fileReader->read(reinterpret_cast<char*>(&newConnection.connectionLength), sizeof newConnection.connectionLength);
             newConnectionsList.push_back(newConnection);
         }
 
@@ -72,7 +72,7 @@ class junction{
 
 class junctionHashMap{
     // An open hashed container used to store nodes
-    private:
+    public:
         static const int CAPACITY = 9311;           // 9311 chosen since it is a large prime
         std::vector<junction> mapList[CAPACITY];
 

@@ -1,5 +1,5 @@
 #include "haversineTest.cpp"
 #include "JSONConversionTests.cpp"
 #include "NetworkTests.cpp"
-#include "ProcessRouteTest.cpp"
 #include "fileReaderTests.cpp"
+#include "ProcessRouteTest.cpp"

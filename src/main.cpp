@@ -22,6 +22,5 @@ route getRoute(std::vector<location> requiredPoints){
 
 
 int main(){
-    extractData();
     return 0;
 }

@@ -7,6 +7,7 @@
 
 class network : public nodeObject{
     private:
+        junctionHashMap nodeList;
         double heuristic(junction currentJunction, junction targetJunction){
             // Uses haversine to calculate aprox distance from current node to target
             return haversine(currentJunction.lat, currentJunction.lon, targetJunction.lat, targetJunction.lon);

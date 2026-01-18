@@ -71,28 +71,32 @@ struct CountHandler : public osmium::handler::Handler {
 
 };
 
-void extractData(){
-    const long long testStartId = 7626974941;
-    const long long testEndId = 7626974938;
+class osmiumFileHandler{
+    private:
+    std::string mapDataPath;
 
-    const osmium::io::File input_file{MAPDATAPATH};
-    osmium::io::Reader reader{input_file};
+    public:
+    osmiumFileHandler(std::string initMapDataPath = MAPDATAPATH){
+        mapDataPath = initMapDataPath;
+    }
 
-    CountHandler dataHandler;
-    osmium::apply(reader, dataHandler);
+    void extractData(){
+        const osmium::io::File input_file{mapDataPath};
+        osmium::io::Reader reader{input_file};
 
-    reader.close();
+        CountHandler dataHandler;
+        osmium::apply(reader, dataHandler);
 
-    std::cout << "Nodes: "     << dataHandler.nodes << "\n";
-    std::cout << "Ways: "      << dataHandler.ways << "\n";
-    std::cout << "Walkable ways: "      << dataHandler.walkways << "\n";
-    std::cout << "Relations: " << dataHandler.relations << "\n";
+        reader.close();
 
-    // dataHandler.map.cullIsolatedJunctions();
-    // std::cout << "Culled Unused Nodes";
+        std::cout << "Nodes: "     << dataHandler.nodes << "\n";
+        std::cout << "Ways: "      << dataHandler.ways << "\n";
+        std::cout << "Walkable ways: "      << dataHandler.walkways << "\n";
+        std::cout << "Relations: " << dataHandler.relations << "\n";
 
-    // dataHandler.map.astar(dataHandler.map.getJunction(testStartId), dataHandler.map.getJunction(testEndId));
-    // std::cout << "Ran Test A*";
-}
+        dataHandler.map.cullIsolatedJunctions();
+        
+    }
 
+};
 #endif

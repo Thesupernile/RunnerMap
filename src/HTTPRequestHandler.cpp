@@ -6,6 +6,7 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     size_t argc = 1;
     napi_value args[1];
     napi_value returnValue;
+    double desiredRteLen = 0;
 
     // Check that the argument is valid
     status = napi_get_cb_info(env, info, &argc, args, NULL, NULL);
@@ -28,7 +29,7 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
     status = napi_get_value_string_utf8(env, args[0], requiredPointsStr, stringLength + 1, NULL);
 
     // Calculate the route
-    std::string JSONToReturn = ProcessRoute(requiredPointsStr);
+    std::string JSONToReturn = ProcessRoute(requiredPointsStr, desiredRteLen);
     free(requiredPointsStr);
 
     status = napi_create_string_utf8(env, JSONToReturn.c_str(), JSONToReturn.length(), &returnValue);
