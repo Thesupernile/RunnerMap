@@ -14,7 +14,7 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
     // Convert to a list of points in the map
     for (int i = 0; i < reqPointsListPtr->size(); i++){
         junction point = (*reqPointsListPtr)[i];
-        int pointId = map->getClosestJunctionId(point.lat, point.lon);
+        std::uint64_t pointId = map->getClosestJunctionId(point.lat, point.lon);
         point = map->getJunction(pointId);
         (*reqPointsListPtr)[i] = point;
     }

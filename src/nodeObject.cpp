@@ -1,4 +1,4 @@
-#include "hashMap.cpp"
+#include "junctionHashMap.cpp"
 #include <array>
 
 class nodeObject{

@@ -9,14 +9,15 @@ class fileReader{
     private:
     std::string filePath;
 
+    public:
+
     void extractDataFromOSMFile(network* mapPtr){
         network map = network();
         osmiumFileHandler osmFileReader = osmiumFileHandler();
+        osmFileReader.extractData(&map);
         
         writeMapData(&map);
     }
-
-    public:
 
     fileReader(std::string newFilePath = "C:/Programming/NEA/Frontend/mapData/"){
         filePath = newFilePath;
@@ -40,8 +41,14 @@ class fileReader{
     void getStoredMap(network* mapPtr){
         // Try to read from the mapping file. If this fails, we read from the raw OSM file
         // NOTE: Something weird happening when binary file is empty
+        // // TEMP CODE
+        // extractDataFromOSMFile(mapPtr);
+
         try{
             readMapData(mapPtr);
+            if (mapPtr->isEmpty()){
+                throw std::invalid_argument("Map extracted from file is empty");
+            }
         }
         catch(int errorCode){
             extractDataFromOSMFile(mapPtr);

@@ -41,7 +41,7 @@ struct CountHandler : public osmium::handler::Handler {
         filter2.add_rule(true, "foot", "private");
         filter2.add_rule(true, "foot", "no");
 
-        if (osmium::tags::match_any_of(way.tags(), filter1) && osmium::tags::match_none_of(way.tags(), filter2)) {
+        //if (osmium::tags::match_any_of(way.tags(), filter1) && osmium::tags::match_none_of(way.tags(), filter2)) {
             // For each node in the way, we add the node to the last node's connections list
             const osmium::WayNodeList& nodeList = way.nodes();
             for (int i = 1; i < nodeList.size(); i++){
@@ -60,7 +60,7 @@ struct CountHandler : public osmium::handler::Handler {
             
             walkways++;
 
-        }
+        //}
         ways++;
     }
 
@@ -80,7 +80,8 @@ class osmiumFileHandler{
         mapDataPath = initMapDataPath;
     }
 
-    void extractData(){
+    void extractData(network* mapPtr){
+        // Extracts OSM data into a map
         const osmium::io::File input_file{mapDataPath};
         osmium::io::Reader reader{input_file};
 
@@ -89,13 +90,10 @@ class osmiumFileHandler{
 
         reader.close();
 
-        std::cout << "Nodes: "     << dataHandler.nodes << "\n";
-        std::cout << "Ways: "      << dataHandler.ways << "\n";
-        std::cout << "Walkable ways: "      << dataHandler.walkways << "\n";
-        std::cout << "Relations: " << dataHandler.relations << "\n";
-
         dataHandler.map.cullIsolatedJunctions();
         
+        // Refactor this to prevent this large copy operation
+        *mapPtr = dataHandler.map;
     }
 
 };

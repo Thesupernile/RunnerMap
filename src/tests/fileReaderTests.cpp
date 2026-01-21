@@ -39,3 +39,9 @@ TEST (FileManipulation, HashMapReadWrite){
     fileReader.close();
 
 }
+
+TEST (FileManipulation, ReadOSMData){
+    fileReader fr = fileReader();
+    network* map = new network();
+    fr.extractDataFromOSMFile(map);
+}

@@ -1,9 +1,9 @@
 #ifndef NETWORK_CPP
 #define NETWORK_CPP
 
-#include "route.cpp"
 #include <memory>
 #include <fstream>
+#include "astarHashMap.cpp"
 
 class network : public nodeObject{
     private:
@@ -35,7 +35,7 @@ class network : public nodeObject{
         void addNewNodeConnection(std::uint64_t targetjunctionId, connection newConnection){
             // Used to add a new arc to an existing node in the network
             if (nodeList.containsKey(targetjunctionId)){
-                nodeList.accessValue(targetjunctionId).connectionsList.push_back(newConnection);
+                nodeList.addJunctionConnection(targetjunctionId, newConnection);
             }
             else{
                 throw std::invalid_argument("Node not in array");
@@ -57,27 +57,11 @@ class network : public nodeObject{
 
         std::unique_ptr<route> astar(std::shared_ptr<junction> start, std::shared_ptr<junction> end, double desiredRouteLength = 0){
             // Use A* to calculate a route. Desired Route length assumed to be zero unless specified (shortest route possible)
-            struct astarjunction{
-                junction node;
-                uint64_t previousNodeId = 0;
-                double g_score = INFINITY;
-                double f_score = INFINITY;
-
-                astarjunction(junction initNode, double initg_score, double initf_score){
-                    node = initNode;
-                    g_score = initg_score;
-                    f_score = initf_score;
-                }
-
-                astarjunction(){
-
-                }
-            };
             bool end_reached = false;
             std::vector<astarjunction> unvisitedNodes;
             std::vector<astarjunction> visitedNodes;
 
-            // Might be worth using a heap to speed this up in the future
+            // Might be worth using a priority queue here to speed this up in the future
             unvisitedNodes.push_back(astarjunction(*start, 0, heuristic(*start, *end)));
             while (!end_reached){
                 // Find node with lowest f-score
