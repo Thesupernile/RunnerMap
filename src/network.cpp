@@ -58,47 +58,31 @@ class network : public nodeObject{
         std::unique_ptr<route> astar(std::shared_ptr<junction> start, std::shared_ptr<junction> end, double desiredRouteLength = 0){
             // Use A* to calculate a route. Desired Route length assumed to be zero unless specified (shortest route possible)
             bool end_reached = false;
-            std::vector<astarjunction> unvisitedNodes;
-            std::vector<astarjunction> visitedNodes;
+            astarHashMap unvisitedNodes{};
+            astarHashMap visitedNodes{};
 
             // Might be worth using a priority queue here to speed this up in the future
-            unvisitedNodes.push_back(astarjunction(*start, 0, heuristic(*start, *end)));
+            unvisitedNodes.insertValue(astarjunction(*start, 0, heuristic(*start, *end)));
             while (!end_reached){
                 // Find node with lowest f-score
                 double lowestFScore = INFINITY;
-                int currentNodeIndex = -1;
-                astarjunction currentNode;
-                for (int i = 0; i < unvisitedNodes.size(); i++){
-                    astarjunction node = unvisitedNodes[i];
-                    if (node.f_score < lowestFScore){
-                        lowestFScore = node.f_score;
-                        currentNode = node;
-                        currentNodeIndex = i;
-                    }
-                }
-                if (currentNode.node.id == end->id){
+                std::uint64_t currentNodeId = unvisitedNodes.getLowestFScore();
+                astarjunction currentNode = unvisitedNodes.accessValue(currentNodeId);
+                if (currentNodeId == end->id){
                     // Copy values for final node into the visited list
                     end_reached = true;
                 }
                 else{
                     for (auto connection : currentNode.node.connectionsList){
                         bool nodeVisited = false;
-                        for (auto node : visitedNodes){
-                            // Check id of node in visited nodes against node in the connection list
-                            if (node.node.id == connection.connectedNodeId){
-                                nodeVisited = true;
-                            }
+                        if (visitedNodes.containsKey(currentNodeId)){
+                            nodeVisited = true;
                         }
                         if (!nodeVisited){
                             bool nodeInUnvisited = false;
                             astarjunction nextNode;
-                            for (auto node : unvisitedNodes){
-                                if (node.node.id == connection.connectedNodeId){
-                                    nodeInUnvisited = true;
-                                    nextNode = node;
-                                }
-                            }
-                            if (nodeInUnvisited){
+                            if (unvisitedNodes.containsKey(connection.connectedNodeId)){
+                                nextNode = unvisitedNodes.accessValue(connection.connectedNodeId);
                                 double gScore = currentNode.g_score + connection.connectionLength;
                                 if (nextNode.g_score > gScore){
                                     nextNode.g_score = gScore;
@@ -115,24 +99,19 @@ class network : public nodeObject{
 
                                 astarjunction newJunction = astarjunction(targetNode, gScore, fScore);
                                 newJunction.previousNodeId = currentNode.node.id;
-                                unvisitedNodes.push_back(newJunction);
+                                unvisitedNodes.insertValue(newJunction);
                             }
                         }
                     }
                 }
-                visitedNodes.push_back(currentNode);
-                unvisitedNodes.erase(unvisitedNodes.begin() + currentNodeIndex);
+                visitedNodes.insertValue(currentNode);
+                unvisitedNodes.removeValue(currentNodeId);
             }
             route optimalPath = route();
             std::uint64_t targetId = end->id;
             while(targetId != start->id){
-                for(int i = 0; i < visitedNodes.size(); i++){
-                    astarjunction *currentJunction = &(visitedNodes[i]);
-                    if ((*currentJunction).node.id == targetId){
-                        targetId = (*currentJunction).previousNodeId;
-                        optimalPath.addJunction((*currentJunction).node);
-                    }
-                }
+                optimalPath.addJunction(visitedNodes.accessValue(targetId).node);
+                targetId = visitedNodes.accessValue(targetId).previousNodeId;
             }
             optimalPath.addJunction(*start);
             optimalPath.reverseRoute();

@@ -65,6 +65,16 @@ class astarHashMap : public hashMap{
 
     }
 
+    void removeValue(std::uint64_t id){
+        std::uint64_t index = hash(id);
+        std::vector<astarjunction> *keyLine = &(mapList[index]);
+        for (int i = 0; i < keyLine->size(); i++){
+            if ((*keyLine)[i].node.id == id){
+                keyLine->erase(keyLine->begin() + i);
+            }
+        }
+    }
+
     astarjunction accessValue(std::uint64_t key){
         // Accesses a value from the hashmap given a junctionID
         std::uint64_t index = hash(key);
@@ -80,7 +90,7 @@ class astarHashMap : public hashMap{
 
     std::uint64_t getLowestFScore(){
         std::uint64_t lowestFScoreId;
-        std::uint64_t lowestFScore = INFINITY;
+        double lowestFScore = INFINITY;
 
         for (int i = 0; i < CAPACITY; i++){
             std::vector<astarjunction> *keyLine = &(mapList[i]);
