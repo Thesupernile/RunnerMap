@@ -16,6 +16,20 @@ html, body {
       padding: 1%;
 }
 
+.loadBox {
+      position: absolute;
+      display: none;
+      left: 25%;
+      top: 45%;
+      width: 20%;
+      height: 10%;
+      background-color: aliceblue;
+      border: solid;
+      border-radius: 3px;
+      border-width: 1px;
+      z-index: 1000;
+}
+
 #map {
       /* configure the size of the map */
       width: 70%;

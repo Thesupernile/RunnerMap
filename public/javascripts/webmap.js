@@ -14543,6 +14543,14 @@ function clearLines(){
 	lines = [];
 }
 
+function openLoadingScreen(){
+	document.getElementById("loadBox").style.display = "inline";
+}
+
+function closeLoadingScreen(){
+	document.getElementById("loadBox").style.display = "none";
+}
+
 document.getElementById("clearButton").addEventListener("click", function clearPoints() {
 	for (let i = 0; i < markers.length; i++){
 		map.removeLayer(markers[i]);
@@ -14623,7 +14631,7 @@ function updateTextBoxes(response){
 	timeBox = document.getElementById("timeBox");
 
 	requiredDistance = calculateRouteLength(response.requiredPoints);
-	numPoints = response.requiredPoints.length;
+	numPoints = routeCoords.length;
 	timeToRun = calculateTimeToRun(requiredDistance);
 
 	distanceBox.innerHTML = `Calculated Route Distance:  ${requiredDistance}km`;
@@ -14632,9 +14640,12 @@ function updateTextBoxes(response){
 }
 
 function sendRequest(requiredRouteLength, isRoundTrip){
+	openLoadingScreen();
 	userErrorBox.innerHTML = " ";
+	let routeCoordsToSend = [];
+	routeCoordsToSend = routeCoords.slice(0);
 	if (isRoundTrip){
-		routeCoords.push(routeCoords[0]);
+		routeCoordsToSend.push(routeCoords[0]);
 	}
 	if (isValidInput()){
 		xhr.open("POST", "/calculateRoute");
@@ -14643,17 +14654,18 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		const body = JSON.stringify({
 			requiredLength: requiredRouteLength,
 			roundTrip: isRoundTrip,
-			requiredPoints: routeCoords
+			requiredPoints: routeCoordsToSend
 		});
 		xhr.onload = () => {
+		closeLoadingScreen();
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			response = JSON.parse(xhr.responseText);
 			console.log(response);
 			
-			routeCoords = response.requiredPoints;
+			let returnedRouteCoords = response.requiredPoints;
 
 			clearLines();
-			route = L.polyline(routeCoords).addTo(map);
+			route = L.polyline(returnedRouteCoords).addTo(map);
 			lines.push(route);
 			updateTextBoxes(response);
 		} else {
