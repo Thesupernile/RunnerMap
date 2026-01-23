@@ -14640,7 +14640,6 @@ function updateTextBoxes(response){
 }
 
 function sendRequest(requiredRouteLength, isRoundTrip){
-	openLoadingScreen();
 	userErrorBox.innerHTML = " ";
 	let routeCoordsToSend = [];
 	routeCoordsToSend = routeCoords.slice(0);
@@ -14648,6 +14647,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		routeCoordsToSend.push(routeCoords[0]);
 	}
 	if (isValidInput()){
+		openLoadingScreen();
 		xhr.open("POST", "/calculateRoute");
 		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
