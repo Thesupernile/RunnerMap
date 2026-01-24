@@ -14652,7 +14652,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 		const body = JSON.stringify({
-			requiredLength: requiredRouteLength,
+			requiredLength: parseFloat(requiredRouteLength),
 			roundTrip: isRoundTrip,
 			requiredPoints: routeCoordsToSend
 		});
