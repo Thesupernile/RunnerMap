@@ -12,7 +12,7 @@ TEST(Routefinding, AStarSearch){
         testData.junctions[testData.endJunctionIndex]
     }};
 
-    std::unique_ptr<route> calculatedRoute = testNetwork.calculateRoute(std::make_shared<std::vector<junction>>(testRouteRequiredJunctions));
+    std::unique_ptr<route> calculatedRoute = testNetwork.calculateRoute(testRouteRequiredJunctions);
 
     std::vector<junction> returnedRoute = calculatedRoute->getRoute();
     
@@ -37,7 +37,6 @@ TEST(Routefinding, DesiredLengthRouteSearch){
     const double desiredRouteLength = 1829;
 
     route calculatedRoute {};
-    std::shared_ptr calculatedRoutePtr = std::make_shared<route>(calculatedRoute);
     uint64_t startJuncID = testData.junctions[testData.startJunctionIndex].id;
     uint64_t endJuncID = testData.junctions[testData.endJunctionIndex].id;
 
@@ -46,8 +45,7 @@ TEST(Routefinding, DesiredLengthRouteSearch){
         testData.junctions[testData.endJunctionIndex]
     }};
 
-    testNetwork.findDLS(calculatedRoutePtr, testRouteRequiredJunctions, desiredRouteLength);
-    calculatedRoute = *calculatedRoutePtr;
+    testNetwork.findDLS(calculatedRoute, testRouteRequiredJunctions, desiredRouteLength);
     std::vector<junction> returnedRoute = calculatedRoute.getRoute();
 
     EXPECT_EQ(round(calculatedRoute.calculateLength()), testData.expectedDLSRouteLength);

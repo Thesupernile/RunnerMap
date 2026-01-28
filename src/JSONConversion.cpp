@@ -26,10 +26,9 @@ std::string convertRouteToJSON(route inputRoute){
 }
 
 
-std::shared_ptr<std::vector<junction>> convertJSONToRoute(std::string JSON){
+void convertJSONToRoute(std::string JSON, std::vector<junction> &reqPointsList){
     // Super simple conversion from list of required points as JSON into a list of required points
     std::vector<junction> requiredPoints {};
-    std::shared_ptr<std::vector<junction>> reqPointsPtr = std::make_shared<std::vector<junction>>(requiredPoints);
     
     int extractedNumCount = 0;
     std::string numStr;
@@ -45,11 +44,11 @@ std::shared_ptr<std::vector<junction>> convertJSONToRoute(std::string JSON){
                     if (extractedNumCount % 2 == 0){
                         junction newJunction = junction();
                         newJunction.lat = stod(numStr);
-                        reqPointsPtr->push_back(newJunction);
+                        reqPointsList.push_back(newJunction);
                     }
                     else{
                         int currentJunctionIndex = floor(extractedNumCount / 2);
-                        (*reqPointsPtr)[currentJunctionIndex].lon = stod(numStr);
+                        reqPointsList[currentJunctionIndex].lon = stod(numStr);
                     }
                     extractedNumCount++;
                     break;
@@ -57,7 +56,5 @@ std::shared_ptr<std::vector<junction>> convertJSONToRoute(std::string JSON){
             }
         }
     }
-    
-    return reqPointsPtr;
 }
 #endif

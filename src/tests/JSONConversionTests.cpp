@@ -19,12 +19,13 @@ const struct {
 
 TEST(JSONParsing, JSONToList){
     // Checks that the function to convert JSON to a list of junctions works correctly
-    std::shared_ptr requiredPointsPtr = convertJSONToRoute(JSONTestData.JSONString);
+    std::vector<junction> requiredPoints;
+    convertJSONToRoute(JSONTestData.JSONString, requiredPoints);
     
-    EXPECT_EQ(requiredPointsPtr->size(), JSONTestData.requiredPoints.size());
-    for (int i = 0; i < requiredPointsPtr->size(); i++){
-        EXPECT_EQ((*requiredPointsPtr)[i].lat, JSONTestData.requiredPoints[i].lat);
-        EXPECT_EQ((*requiredPointsPtr)[i].lon, JSONTestData.requiredPoints[i].lon);
+    EXPECT_EQ(requiredPoints.size(), JSONTestData.requiredPoints.size());
+    for (int i = 0; i < requiredPoints.size(); i++){
+        EXPECT_EQ(requiredPoints[i].lat, JSONTestData.requiredPoints[i].lat);
+        EXPECT_EQ(requiredPoints[i].lon, JSONTestData.requiredPoints[i].lon);
     }
 }
 

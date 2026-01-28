@@ -4,7 +4,8 @@
 #include "fileReader.cpp"
 
 std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRteLen){
-    std::shared_ptr<std::vector<junction>> reqPointsListPtr = std::move(convertJSONToRoute(requiredPointsJSON));
+    std::vector<junction> reqPointsList;
+    convertJSONToRoute(requiredPointsJSON, reqPointsList);
 
     // Create the network
     network* map = new network();     // Network object used for testing
@@ -12,25 +13,25 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
     reader.getStoredMap(map);
 
     // Convert to a list of points in the map
-    for (int i = 0; i < reqPointsListPtr->size(); i++){
-        junction point = (*reqPointsListPtr)[i];
+    for (int i = 0; i < reqPointsList.size(); i++){
+        junction point = reqPointsList[i];
         std::uint64_t pointId = map->getClosestJunctionId(point.lat, point.lon);
         point = map->getJunction(pointId);
-        (*reqPointsListPtr)[i] = point;
+        reqPointsList[i] = point;
     }
     
     std::string JSONToReturn;
     // Calculate the route
     if (desiredRteLen == 0){
-        std::unique_ptr<route> calculatedRoutePtr = std::move(map->calculateRoute(reqPointsListPtr));   // Pointer to calculated route needing to be returned to user
+        std::unique_ptr<route> calculatedRoutePtr = std::move(map->calculateRoute(reqPointsList));   // Pointer to calculated route needing to be returned to user
         // TODO Convert this function to use a pointer as a parameter
         JSONToReturn = convertRouteToJSON(*calculatedRoutePtr);
     }
     else{
-        std::shared_ptr<route> dlsRoutePtr;
-        map->findDLS(dlsRoutePtr, *reqPointsListPtr, desiredRteLen);
+        route dlsRoute;
+        map->findDLS(dlsRoute, reqPointsList, desiredRteLen);
         // TODO Convert this function to use a pointer as a parameter
-        JSONToReturn = convertRouteToJSON(*dlsRoutePtr);
+        JSONToReturn = convertRouteToJSON(dlsRoute);
     }
     delete(map);
 
