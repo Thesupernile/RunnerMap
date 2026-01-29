@@ -45,6 +45,7 @@ class astarHashMap : public hashMap{
         const std::uint64_t index = hash(key);
 
         std::vector<astarjunction> *keyLine = &(mapList[index]);
+        // If the list is empty we know that the requested node isn't already in the list. Otherwise we need to check
         if (keyLine->size() < 1){
             keyLine->push_back(junctionToAdd);
             numJunctions++;
@@ -66,6 +67,7 @@ class astarHashMap : public hashMap{
     }
 
     void removeValue(std::uint64_t id){
+        // Removes a junction with the given id from the hashmap
         std::uint64_t index = hash(id);
         std::vector<astarjunction> *keyLine = &(mapList[index]);
         for (int i = 0; i < keyLine->size(); i++){
@@ -90,6 +92,7 @@ class astarHashMap : public hashMap{
     }
 
     std::uint64_t getLowestFScore(){
+        // Finds the node in the hashmap with the lowest FScore
         std::uint64_t lowestFScoreId;
         double lowestFScore = INFINITY;
 

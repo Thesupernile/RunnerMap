@@ -51,7 +51,6 @@ class network : public nodeObject{
         }
 
         void cullIsolatedJunctions(){
-            // TODO Removes junctions with no connections (aimed to improve performance)
             nodeList.cull();
         }
 
@@ -205,6 +204,7 @@ class network : public nodeObject{
             std::vector<junction> fullRouteRoute = fullRoute.getRoute();
 
             for (int i = 0; i < requiredJunctions.size() - 1; i++){
+                // Find the shortest path between each junction the user requested the route visits
                 junction currentJunction = requiredJunctions[i];
                 junction nextJunction = requiredJunctions[i+1];
                 subroute = route();
@@ -213,7 +213,6 @@ class network : public nodeObject{
                 std::vector<junction> subrouteRoute = subroute.getRoute();
 
                 fullRouteRoute.insert(fullRouteRoute.end(), subrouteRoute.begin(), subrouteRoute.end());
-                // Consider using pointers here?
             }
             fullRoute.setRoute(fullRouteRoute);
         }

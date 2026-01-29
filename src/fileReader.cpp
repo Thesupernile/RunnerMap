@@ -39,21 +39,21 @@ class fileReader{
     }
 
     void getStoredMap(network* mapPtr){
-        // Try to read from the mapping file. If this fails, we read from the raw OSM file
-        // NOTE: Something weird happening when binary file is empty
-        // // TEMP CODE
-        // extractDataFromOSMFile(mapPtr);
-
+        // Try to read from the mapping file. If this fails, we read from the raw OSM file if both fail we return an error
         try{
             readMapData(mapPtr);
             if (mapPtr->isEmpty()){
-                throw std::invalid_argument("Map extracted from file is empty");
+                throw std::runtime_error("Map extracted from file is empty");
             }
         }
         catch(int errorCode){
-            extractDataFromOSMFile(mapPtr);
+            try{
+                extractDataFromOSMFile(mapPtr);
+            }
+            catch(int errorCode){
+                throw std::runtime_error("OSM File cannot be read");
+            }
         }
     }
-
 };
 #endif

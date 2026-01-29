@@ -8,7 +8,7 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
     convertJSONToRoute(requiredPointsJSON, reqPointsList);
 
     // Create the network
-    network* map = new network();     // Network object used for testing
+    network* map = new network();
     fileReader reader;
     reader.getStoredMap(map);
 
@@ -29,7 +29,6 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
     else{
         map->findDLS(finalRoute, reqPointsList, desiredRteLen);
     }
-    // TODO Convert this function to use a pointer as a parameter
     JSONToReturn = convertRouteToJSON(finalRoute);
 
     delete(map);

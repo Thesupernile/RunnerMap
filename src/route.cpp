@@ -9,15 +9,18 @@ class route : public nodeObject{
         }
 
         void createJunction(std::uint64_t junctionID, double junctionLat, double junctionLon){
+            // Add a new junction by first creating it
             junction newJunction = junction(junctionID, junctionLat, junctionLon);
             addJunction(newJunction);
         }
 
         void addJunction(junction junctionToAdd){
+            // Add an already constructed junction
             junctionList.push_back(junctionToAdd);
         }
 
         bool containsJunction(std::uint64_t junctionID){
+            // Find whether the route contains a junction with the given ID
             for (junction junction : junctionList){
                 if (junction.id == junctionID){
                     return true;
@@ -27,6 +30,7 @@ class route : public nodeObject{
         }
 
         junction getJunction(std::uint64_t junctionID){
+            // Get a specific junction from a route
             for (junction junction : junctionList){
                 if (junction.id == junctionID){
                     return junction;
@@ -36,6 +40,7 @@ class route : public nodeObject{
         }
 
         double calculateLength(){
+            // Calculate the length of the whole route
             double length = 0;
             for (int i = 1; i < junctionList.size(); i++){
                 junction previousJunction = junctionList[i-1];

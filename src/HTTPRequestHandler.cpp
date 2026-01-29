@@ -35,6 +35,7 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
         return NULL;
     }
 
+    // Get the desired route length
     double desiredRteLen = 0;
     status = napi_get_value_double(env, args[1], &desiredRteLen);
 
@@ -48,6 +49,7 @@ napi_value JavaScriptBindings(napi_env env, napi_callback_info info){
 };
 
 napi_value Init(napi_env env, napi_value exports) {
+    // Create the binding for the calculateRoute function in javascript
     napi_status status;
     napi_property_descriptor desc = { "CalculateRoute", NULL, JavaScriptBindings, NULL, NULL, NULL, napi_configurable, NULL };
     status = napi_define_properties(env, exports, 1, &desc);

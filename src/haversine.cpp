@@ -4,6 +4,7 @@
 #include <cmath>
 
 double haversine(double lat1, double lon1, double lat2, double lon2){
+    // Finds the straight line distance between two points using their lat and lon
     const int EARTH_RADIUS {6371000};      // Radius of the earth
     const double PI        {3.1415926535};      // PI (the constant)
 

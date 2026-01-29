@@ -9,7 +9,6 @@ class hashMap{
 
 
         std::uint64_t hash(std::uint64_t key){
-            // TK INSERT A REAL HASH FUNCTION
             return key % CAPACITY;
         }
     public:

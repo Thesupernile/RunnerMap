@@ -111,7 +111,6 @@ class osmiumFileHandler{
 
         dataHandler.map.cullIsolatedJunctions();
         
-        // Refactor this to prevent this large copy operation
         *mapPtr = dataHandler.map;
     }
 
