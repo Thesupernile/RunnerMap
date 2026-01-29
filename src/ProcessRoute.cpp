@@ -21,18 +21,17 @@ std::string ProcessRoute(const std::string &requiredPointsJSON, double desiredRt
     }
     
     std::string JSONToReturn;
+    route finalRoute;
     // Calculate the route
     if (desiredRteLen == 0){
-        std::unique_ptr<route> calculatedRoutePtr = std::move(map->calculateRoute(reqPointsList));   // Pointer to calculated route needing to be returned to user
-        // TODO Convert this function to use a pointer as a parameter
-        JSONToReturn = convertRouteToJSON(*calculatedRoutePtr);
+        map->calculateRoute(reqPointsList, finalRoute);   // Pointer to calculated route needing to be returned to user
     }
     else{
-        route dlsRoute;
-        map->findDLS(dlsRoute, reqPointsList, desiredRteLen);
-        // TODO Convert this function to use a pointer as a parameter
-        JSONToReturn = convertRouteToJSON(dlsRoute);
+        map->findDLS(finalRoute, reqPointsList, desiredRteLen);
     }
+    // TODO Convert this function to use a pointer as a parameter
+    JSONToReturn = convertRouteToJSON(finalRoute);
+
     delete(map);
 
     return JSONToReturn;

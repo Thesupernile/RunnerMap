@@ -29,19 +29,38 @@ struct CountHandler : public osmium::handler::Handler {
     // This callback is called by osmium::apply for each way in the data.
     void way(const osmium::Way& way) noexcept {
         // Create our way filter
-        osmium::TagsFilter filter1{false};
-        filter1.add_rule(true, "highway", "footway");
-        filter1.add_rule(true, "highway", "pavement");
-        filter1.add_rule(true, "foot", "yes");
-        filter1.add_rule(true, "foot", "designated");
-        filter1.add_rule(true, "foot", "permissive");
-        filter1.add_rule(true, "foot", "use_sidepath");
+        // osmium::TagsFilter filter1{false};
+        // filter1.add_rule(true, "highway", "footway");
+        // filter1.add_rule(true, "highway", "pavement");
+        // filter1.add_rule(true, "highway", "cycleway");
+        // filter1.add_rule(true, "highway", "residential");
+        // filter1.add_rule(true, "highway", "path");
+        // filter1.add_rule(true, "highway", "unclassified");
+        // filter1.add_rule(true, "foot", "yes");
+        // filter1.add_rule(true, "foot", "designated");
+        // filter1.add_rule(true, "foot", "permissive");
+        // filter1.add_rule(true, "foot", "use_sidepath");
+        // filter1.add_rule(true, "sidewalk", "both");
+        // filter1.add_rule(true, "sidewalk", "left");
+        // filter1.add_rule(true, "sidewalk", "right");
+        // filter1.add_rule(true, "sidewalk", "yes");
+        // filter1.add_rule(true, "sidewalk", "raised");
+        // filter1.add_rule(true, "sidewalk", "half");
+        // filter1.add_rule(true, "sidewalk", "detatched");
+        // filter1.add_rule(true, "sidewalk", "separate");
 
         osmium::TagsFilter filter2{false};
         filter2.add_rule(true, "foot", "private");
         filter2.add_rule(true, "foot", "no");
+        filter2.add_rule(true, "access", "private");
+        filter2.add_rule(true, "railway", "rail");
+        filter2.add_rule(true, "waterway", "river");
+        filter2.add_rule(true, "water", "river");
+        filter2.add_rule(true, "landuse", "railway");
+        filter2.add_rule(true, "barrier", "fence");
+        filter2.add_rule(true, "highway", "motorway");
 
-        //if (osmium::tags::match_any_of(way.tags(), filter1) && osmium::tags::match_none_of(way.tags(), filter2)) {
+        if (/*osmium::tags::match_any_of(way.tags(), filter1) &&*/ osmium::tags::match_none_of(way.tags(), filter2)) {
             // For each node in the way, we add the node to the last node's connections list
             const osmium::WayNodeList& nodeList = way.nodes();
             for (int i = 1; i < nodeList.size(); i++){
@@ -60,7 +79,7 @@ struct CountHandler : public osmium::handler::Handler {
             
             walkways++;
 
-        //}
+        }
         ways++;
     }
 

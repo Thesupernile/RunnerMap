@@ -62,4 +62,8 @@ class route : public nodeObject{
                 junctionList[i] = temp;
             }
         }
+
+        void dropLastNode(){
+            junctionList.erase(--junctionList.end());
+        }
 };

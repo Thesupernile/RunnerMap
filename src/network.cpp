@@ -55,34 +55,35 @@ class network : public nodeObject{
             nodeList.cull();
         }
 
-        std::unique_ptr<route> astar(junction &start, junction &end, double desiredRouteLength = 0){
+        void astar(junction &start, junction &end, route &optimalPath){
             // Use A* to calculate a route. Desired Route length assumed to be zero unless specified (shortest route possible)
             bool end_reached = false;
-            astarHashMap unvisitedNodes{};
-            astarHashMap visitedNodes{};
+            astarHashMap* unvisitedNodes = new astarHashMap();
+            astarHashMap* visitedNodes = new astarHashMap();
 
-            // Might be worth using a priority queue here to speed this up in the future
-            unvisitedNodes.insertValue(astarjunction(start, 0, heuristic(start, end)));
+            unvisitedNodes->insertValue(astarjunction(start, 0, heuristic(start, end)));
             while (!end_reached){
                 // Find node with lowest f-score
                 double lowestFScore = INFINITY;
-                std::uint64_t currentNodeId = unvisitedNodes.getLowestFScore();
-                astarjunction currentNode = unvisitedNodes.accessValue(currentNodeId);
+                std::uint64_t currentNodeId = unvisitedNodes->getLowestFScore();
+                astarjunction currentNode = unvisitedNodes->accessValue(currentNodeId);
                 if (currentNodeId == end.id){
-                    // Copy values for final node into the visited list
+                    // If program reaches the end it is done
                     end_reached = true;
                 }
                 else{
                     for (auto connection : currentNode.node.connectionsList){
                         bool nodeVisited = false;
-                        if (visitedNodes.containsKey(currentNodeId)){
+                        if (visitedNodes->containsKey(currentNodeId)){
                             nodeVisited = true;
                         }
                         if (!nodeVisited){
+                            // We only look at a node if we've not visited it yet. If we have we already know that we've found the optimal path to that node
                             bool nodeInUnvisited = false;
                             astarjunction nextNode;
-                            if (unvisitedNodes.containsKey(connection.connectedNodeId)){
-                                nextNode = unvisitedNodes.accessValue(connection.connectedNodeId);
+                            if (unvisitedNodes->containsKey(connection.connectedNodeId)){
+                                // If we've seen the node before we just need to check if the gscore from the new connection is higher than the previous one
+                                nextNode = unvisitedNodes->accessValue(connection.connectedNodeId);
                                 double gScore = currentNode.g_score + connection.connectionLength;
                                 if (nextNode.g_score > gScore){
                                     nextNode.g_score = gScore;
@@ -93,33 +94,34 @@ class network : public nodeObject{
 
                             }
                             else{
+                                // If we've not seen the node before, we need to create it and add it to the unvisited list
                                 junction targetNode = nodeList.accessValue(connection.connectedNodeId);
                                 double gScore = currentNode.g_score + connection.connectionLength;
                                 double fScore = gScore + heuristic(targetNode, end);
 
                                 astarjunction newJunction = astarjunction(targetNode, gScore, fScore);
                                 newJunction.previousNodeId = currentNode.node.id;
-                                unvisitedNodes.insertValue(newJunction);
+                                unvisitedNodes->insertValue(newJunction);
                             }
                         }
                     }
                 }
-                visitedNodes.insertValue(currentNode);
-                unvisitedNodes.removeValue(currentNodeId);
+                visitedNodes->insertValue(currentNode);
+                unvisitedNodes->removeValue(currentNodeId);
             }
-            route optimalPath = route();
+            // Traverse the route backwards by starting at the end and following the previous node ids
             std::uint64_t targetId = end.id;
             while(targetId != start.id){
-                optimalPath.addJunction(visitedNodes.accessValue(targetId).node);
-                targetId = visitedNodes.accessValue(targetId).previousNodeId;
+                optimalPath.addJunction(visitedNodes->accessValue(targetId).node);
+                targetId = visitedNodes->accessValue(targetId).previousNodeId;
             }
             optimalPath.addJunction(start);
+            // Path is traversed backwards during creation process so reversing the route is necessary
             optimalPath.reverseRoute();
 
-            // Return the path calculated
-            // TODO, return the actual route
-            // Worth rewriting a lot of this to use ptrs so we avoid unnecessary memory allocation and deallocation
-            return std::make_unique<route>(optimalPath);
+            // Cleanup
+            delete(visitedNodes);
+            delete(unvisitedNodes);
         }
 
 
@@ -134,40 +136,60 @@ class network : public nodeObject{
 
             if (remainingRouteLength <= estimatedRemainingDistance){
                 // AStar to the end junction
+                astar(start, end, route);
+                route.reverseRoute();
+                route.dropLastNode();
             }
-
-            // We need to look for nodes that are approximately the right distance away
-            for(connection connection : start.connectionsList){
-                junction connectedJunction = nodeList.accessValue(connection.connectedNodeId);
-                double distanceDiff = abs(remainingRouteLength - (connection.connectionLength + heuristic(connectedJunction, nodeList.accessValue(endNodeId))));
-                if (distanceDiff < closestDistance){
-                    closestDistance = distanceDiff;
-                    bestConnectionDistance = connection.connectionLength;
-                    bestJunction = connectedJunction;
+            else{
+                // We need to look for nodes that are approximately the right distance away
+                for(connection connection : start.connectionsList){
+                    junction connectedJunction = nodeList.accessValue(connection.connectedNodeId);
+                    double distanceDiff = abs(remainingRouteLength - (connection.connectionLength + heuristic(connectedJunction, nodeList.accessValue(endNodeId))));
+                    if (distanceDiff < closestDistance){
+                        closestDistance = distanceDiff;
+                        bestConnectionDistance = connection.connectionLength;
+                        bestJunction = connectedJunction;
+                    }
                 }
-            }
-            remainingRouteLength -= bestConnectionDistance;
-            if (remainingRouteLength < 0){ remainingRouteLength = 0; }
-            if (bestJunction.id == endNodeId){
-                route.addJunction(bestJunction);
-                return;
-            }
+                remainingRouteLength -= bestConnectionDistance;
+                if (remainingRouteLength < 0){ remainingRouteLength = 0; }
+                if (bestJunction.id == endNodeId){
+                    route.addJunction(bestJunction);
+                    return;
+                }
 
-            uint64_t nextNodeid = bestJunction.id;
-            findDLSRecurse(route, nextNodeid, endNodeId, remainingRouteLength);
-            route.addJunction(bestJunction);
+                uint64_t nextNodeid = bestJunction.id;
+                findDLSRecurse(route, nextNodeid, endNodeId, remainingRouteLength);
+                route.addJunction(bestJunction);
+            }
         }
 
-        void findDLS(route &route, std::vector<junction> requiredJunctions, double remainingRouteLength){
+        void findDLS(route &fullRoute, std::vector<junction> requiredJunctions, double remainingRouteLength){
             // Find the expected length
             double expectMinRteLen {};
+            std::vector<junction> fullRouteRoute = fullRoute.getRoute();
+            route subroute {};
+
             for (int i = 1; i < requiredJunctions.size(); i++){
                 expectMinRteLen += heuristic(requiredJunctions[i-1], requiredJunctions[i]);
             }
-            
-            findDLSRecurse(route, requiredJunctions[0].id, requiredJunctions[1].id, remainingRouteLength);
-            route.addJunction(nodeList.accessValue(requiredJunctions[0].id));
-            route.reverseRoute();
+
+            for (int i = 0; i < requiredJunctions.size() - 1; i++){
+                // Each leg gets allocated approximately the right amount of the desired route length depending on
+                // it's proportion of the distance in an optimal route.
+                double estimatedMinLegRteLen = heuristic(requiredJunctions[i], requiredJunctions[i+1]);
+                double routeLengthForThisLeg = (estimatedMinLegRteLen/expectMinRteLen) * remainingRouteLength;
+                subroute = route();
+
+                findDLSRecurse(subroute, requiredJunctions[i].id, requiredJunctions[i+1].id, routeLengthForThisLeg);
+                subroute.addJunction(nodeList.accessValue(requiredJunctions[i].id));
+                subroute.reverseRoute();
+                std::vector<junction> subrouteRoute = subroute.getRoute();
+
+                fullRouteRoute.insert(fullRouteRoute.end(), subrouteRoute.begin(), subrouteRoute.end());
+            }
+
+            fullRoute.setRoute(fullRouteRoute);
         }
 
         std::uint64_t getClosestJunctionId(double lat, double lon){
@@ -178,23 +200,22 @@ class network : public nodeObject{
         }
 
 
-        std::unique_ptr<route> calculateRoute(std::vector<junction> &requiredJunctions){
-            route fullRoute {};
-            std::unique_ptr<route> subroute;
+        void calculateRoute(std::vector<junction> &requiredJunctions, route &fullRoute){
+            route subroute;
             std::vector<junction> fullRouteRoute = fullRoute.getRoute();
 
             for (int i = 0; i < requiredJunctions.size() - 1; i++){
                 junction currentJunction = requiredJunctions[i];
                 junction nextJunction = requiredJunctions[i+1];
+                subroute = route();
 
-                subroute = std::move(astar(currentJunction, nextJunction));
-                std::vector<junction> subrouteRoute = subroute->getRoute();
+                astar(currentJunction, nextJunction, subroute);
+                std::vector<junction> subrouteRoute = subroute.getRoute();
 
                 fullRouteRoute.insert(fullRouteRoute.end(), subrouteRoute.begin(), subrouteRoute.end());
                 // Consider using pointers here?
             }
             fullRoute.setRoute(fullRouteRoute);
-            return std::make_unique<route>(fullRoute);
         }
 
         void storeAsBinary(std::ofstream *fileWriter){

@@ -12,9 +12,10 @@ TEST(Routefinding, AStarSearch){
         testData.junctions[testData.endJunctionIndex]
     }};
 
-    std::unique_ptr<route> calculatedRoute = testNetwork.calculateRoute(testRouteRequiredJunctions);
+    route calculatedRoute;
+    testNetwork.calculateRoute(testRouteRequiredJunctions, calculatedRoute);
 
-    std::vector<junction> returnedRoute = calculatedRoute->getRoute();
+    std::vector<junction> returnedRoute = calculatedRoute.getRoute();
     
     EXPECT_EQ(returnedRoute.size(), testData.expectedRouteJunctions.size());
     for (int i = 0; i < returnedRoute.size(); i++){
@@ -48,10 +49,13 @@ TEST(Routefinding, DesiredLengthRouteSearch){
     testNetwork.findDLS(calculatedRoute, testRouteRequiredJunctions, desiredRouteLength);
     std::vector<junction> returnedRoute = calculatedRoute.getRoute();
 
+    // NOTE: ExpectedDLSRoute is actually incorrect here because I changed the function...
     EXPECT_EQ(round(calculatedRoute.calculateLength()), testData.expectedDLSRouteLength);
     EXPECT_EQ(returnedRoute.size(), testData.expectedRouteJunctionsDesiredLength.size());
-    for (int i = 0; i < returnedRoute.size(); i++){
-        EXPECT_EQ(returnedRoute[i].id, testData.expectedRouteJunctionsDesiredLength[i].id);
+    if (returnedRoute.size() == testData.expectedRouteJunctionsDesiredLength.size()){
+        for (int i = 0; i < returnedRoute.size(); i++){
+            EXPECT_EQ(returnedRoute[i].id, testData.expectedRouteJunctionsDesiredLength[i].id);
+        }
     }
 }
 

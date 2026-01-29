@@ -71,6 +71,7 @@ class astarHashMap : public hashMap{
         for (int i = 0; i < keyLine->size(); i++){
             if ((*keyLine)[i].node.id == id){
                 keyLine->erase(keyLine->begin() + i);
+                numJunctions--;
             }
         }
     }
@@ -101,7 +102,6 @@ class astarHashMap : public hashMap{
                 }
             }
         }
-
         return lowestFScoreId;
     }
 
