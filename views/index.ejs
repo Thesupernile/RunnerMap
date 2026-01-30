@@ -11,14 +11,25 @@
         <div id="sideBar" class="sideBar">
             <h1>Runner Map V0.2.1</h1>
             <br>
-            <p id="distanceBox">Calculated Route Distance:  XXXkm</p>
-            <p id="numPointsBox">Number of Required:  XXX</p>
-            <p id="timeBox">Approximate Time To Run: XXXhrs XXXmins XXXsecs</p>
+            <p id="distanceBox">Calculated Route Distance:  0km</p>
+            <p id="numPointsBox">Number of Required Destinations:  0</p>
+            <p id="timeBox">Approximate Time To Run: 0hrs 0mins 0secs</p>
+            <div class="paceInputDiv">
+                <p id="paceDisplay">Pace: 6:00 min/km</p>
+                <input type="range" min="18" max="72" value="36" class="slider" id="paceInput">
+            </div>
+            <label>Minimum Length? </label>
+            <input type="checkbox" id="isMinLengthInput" name="minLength" checked></input>
+            <br>
+            <br>
             <form action="/calculateRoute" method="POST">
-                <label>Length Of Route Wanted (Zero for Minimum): </label>
-                <input type="text" id="requiredLengthInput" name="requiredLength" placeholder="Enter Route Length Here: " ></input>
-                <br>
-                <br>
+                <div id="DLSInput" style="display: none;">
+                    <label>Length Of Route Wanted (metres): </label>
+                    <br>
+                    <input type="text" id="requiredLengthInput" name="requiredLength" placeholder="Enter Route Length Here: " ></input>
+                    <br>
+                    <br>
+                </div>
                 <label>Round Trip? </label>
                 <input type="checkbox" id="isRoundTripInput" name="roundTrip" value="<%- locals.roundTrip %>"></input>
             </form>

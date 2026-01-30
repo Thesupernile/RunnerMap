@@ -16,6 +16,14 @@ html, body {
       padding: 1%;
 }
 
+.paceInputDiv {
+  width: 100%;
+}
+
+.slider {
+  width: 100%; 
+}
+
 .loadBox {
       position: absolute;
       display: none;
