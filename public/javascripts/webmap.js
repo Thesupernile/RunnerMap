@@ -14552,10 +14552,12 @@ function closeLoadingScreen(){
 }
 
 document.getElementById("clearButton").addEventListener("click", function clearPoints() {
+	userErrorBox.innerHTML = " ";
 	for (let i = 0; i < markers.length; i++){
 		map.removeLayer(markers[i]);
 	}
 	clearLines();
+	clearTextBoxes();
 	
 	markers = [];
 	routeCoords = [];
@@ -14565,12 +14567,17 @@ function isStringNumber(string){
 	return !isNaN(string) && !isNaN(parseFloat(string));
 }
 
-function isValidInput(){
+function isValidInput(isRoundTrip){
 	requiredLength = document.getElementById("requiredLengthInput").value;
-	if (isStringNumber(requiredLength) && requiredLength >= 0){
-		return true;
+	if (!isStringNumber(requiredLength) || !(requiredLength >= 0)){
+		userErrorBox.innerHTML = "Invalid Desired Length!";
+		return false;
 	}
-	return false;
+	if (routeCoords.length < 2){
+		userErrorBox.innerHTML = "You must place at least two points on the map to create a route!";
+		return false;
+	}
+	return true;
 }
 
 function haversine(lat1, lon1, lat2, lon2){
@@ -14625,6 +14632,16 @@ function calculateTimeToRun(distance){
 	return timeToRun;
 }
 
+function clearTextBoxes(){
+	distanceBox = document.getElementById("distanceBox");
+	numPointsBox = document.getElementById("numPointsBox");
+	timeBox = document.getElementById("timeBox");	
+
+	distanceBox.innerHTML = `Calculated Route Distance:  XXXkm`;
+	numPointsBox.innerHTML = `Number of Required Destinations:  XXX`;
+	timeBox.innerHTML = `Approximate Time To Run: XXXhrs XXXmins XXXsecs`;
+}
+
 function updateTextBoxes(response){
 	distanceBox = document.getElementById("distanceBox");
 	numPointsBox = document.getElementById("numPointsBox");
@@ -14674,9 +14691,6 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		}
 		};
 		xhr.send(body);
-	}
-	else{
-		userErrorBox.innerHTML = "Invalid Input!";
 	}
 }
 
