@@ -17,6 +17,9 @@
 *.ilk
 *.pdb
 *.zip
+*.cd
+*.sln
+*.vcxproj*
 filePathDef.cpp
 package.json
 package-lock.json
