@@ -28,8 +28,6 @@ std::string convertRouteToJSON(route inputRoute){
 
 void convertJSONToRoute(std::string JSON, std::vector<junction> &reqPointsList){
     // Super simple conversion from list of required points as JSON into a list of required points
-    std::vector<junction> requiredPoints {};
-    
     int extractedNumCount = 0;
     std::string numStr;
     for (int i = 0; i < JSON.length(); i++){

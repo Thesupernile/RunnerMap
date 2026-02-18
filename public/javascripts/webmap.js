@@ -26,12 +26,12 @@ const userErrorBox = document.getElementById("ErrorFeedback");
   function extend(dest) {
   	var i, j, len, src;
 
-  	for (j = 1, len = arguments.length; j < len; j++) {
-  		src = arguments[j];
-  		for (i in src) {
-  			dest[i] = src[i];
-  		}
-  	}
+	for (j = 1, len = arguments.length; j < len; j++) {
+		src = arguments[j];
+		for (i in src) {
+			dest[i] = src[i];
+		}
+	}
   	return dest;
   }
 

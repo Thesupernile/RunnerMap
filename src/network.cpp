@@ -77,11 +77,13 @@ class network : public nodeObject{
                             nodeVisited = true;
                         }
                         if (!nodeVisited){
-                            // We only look at a node if we've not visited it yet. If we have we already know that we've found the optimal path to that node
+                            // We only look at a node if we've not visited it yet. 
+                            //If we have we already know that we've found the optimal path to that node
                             bool nodeInUnvisited = false;
                             astarjunction nextNode;
                             if (unvisitedNodes->containsKey(connection.connectedNodeId)){
-                                // If we've seen the node before we just need to check if the gscore from the new connection is higher than the previous one
+                                // If we've seen the node before we just need to check 
+                                // if the gscore from the new connection is higher than the previous one
                                 nextNode = unvisitedNodes->accessValue(connection.connectedNodeId);
                                 double gScore = currentNode.g_score + connection.connectionLength;
                                 if (nextNode.g_score > gScore){
@@ -123,8 +125,17 @@ class network : public nodeObject{
             delete(unvisitedNodes);
         }
 
+        bool isNodePreviouslyVisited(uint64_t nodeId, std::vector<uint64_t> &previouslyVisitedNodeIds){
+            for (auto id : previouslyVisitedNodeIds){
+                if(id == nodeId){
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        void findDLSRecurse(route &route, uint64_t startNodeId, uint64_t endNodeId, double remainingRouteLength = 0){
+
+        void findDLSRecurse(route &route, std::vector<uint64_t> &previouslyVistedNodeIds, uint64_t startNodeId, uint64_t endNodeId, double remainingRouteLength = 0){
             // Finds a route of a desired length (DLS) based on a start and end point
             junction start = nodeList.accessValue(startNodeId);
             junction end = nodeList.accessValue(endNodeId);
@@ -132,6 +143,9 @@ class network : public nodeObject{
             double estimatedRemainingDistance = heuristic(start, end);
             double bestConnectionDistance = 0;
             junction bestJunction;
+            
+            // Mark this node as being previously visited
+            previouslyVistedNodeIds.push_back(startNodeId);
 
             if (remainingRouteLength <= estimatedRemainingDistance){
                 // AStar to the end junction
@@ -144,7 +158,8 @@ class network : public nodeObject{
                 for(connection connection : start.connectionsList){
                     junction connectedJunction = nodeList.accessValue(connection.connectedNodeId);
                     double distanceDiff = abs(remainingRouteLength - (connection.connectionLength + heuristic(connectedJunction, nodeList.accessValue(endNodeId))));
-                    if (distanceDiff < closestDistance){
+                    bool isPreviouslyVisited = isNodePreviouslyVisited(connectedJunction.id, previouslyVistedNodeIds);
+                    if (!isPreviouslyVisited && distanceDiff < closestDistance){
                         closestDistance = distanceDiff;
                         bestConnectionDistance = connection.connectionLength;
                         bestJunction = connectedJunction;
@@ -158,7 +173,7 @@ class network : public nodeObject{
                 }
 
                 uint64_t nextNodeid = bestJunction.id;
-                findDLSRecurse(route, nextNodeid, endNodeId, remainingRouteLength);
+                findDLSRecurse(route, previouslyVistedNodeIds, nextNodeid, endNodeId, remainingRouteLength);
                 route.addJunction(bestJunction);
             }
         }
@@ -179,8 +194,9 @@ class network : public nodeObject{
                 double estimatedMinLegRteLen = heuristic(requiredJunctions[i], requiredJunctions[i+1]);
                 double routeLengthForThisLeg = (estimatedMinLegRteLen/expectMinRteLen) * remainingRouteLength;
                 subroute = route();
+                std::vector<uint64_t> previouslyVisitedNodes;
 
-                findDLSRecurse(subroute, requiredJunctions[i].id, requiredJunctions[i+1].id, routeLengthForThisLeg);
+                findDLSRecurse(subroute, previouslyVisitedNodes, requiredJunctions[i].id, requiredJunctions[i+1].id, routeLengthForThisLeg);
                 subroute.addJunction(nodeList.accessValue(requiredJunctions[i].id));
                 subroute.reverseRoute();
                 std::vector<junction> subrouteRoute = subroute.getRoute();
@@ -221,10 +237,10 @@ class network : public nodeObject{
             nodeList.storeAsBinary(fileWriter);
         }
 
-        void readFromBinary(std::ifstream *fileWriter){
-            junctionHashMap newNodeList;
+        void readFromBinary(std::ifstream *fileReader){
+            junctionHashMap newNodeList{};
 
-            newNodeList.readFromBinary(fileWriter);
+            newNodeList.readFromBinary(fileReader);
             nodeList = newNodeList;
         }
 

@@ -25,4 +25,3 @@ class hashMap{
 
         virtual bool containsKey(std::uint64_t targetKey) = 0;
 };
-

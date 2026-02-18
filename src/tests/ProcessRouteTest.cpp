@@ -17,4 +17,5 @@ TEST(RouteProcessing, ProcessDLSRoute){
     const double desiredRouteLength = 1000.0;
 
     std::string outputJSON = ProcessRoute(INPUTJSON, desiredRouteLength);
+    EXPECT_STREQ(outputJSON.c_str(), EXPECTED_OUTPUT_JSON.c_str());
 }

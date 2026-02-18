@@ -32,8 +32,8 @@ app.post("/calculateRoute", (req, res, next) =>{
             // Send back response to client
             res.send(response);
         }
-        catch{
-            return res.status(500).send({message: "Unknown error"});
+        catch(error){
+            return res.status(500).send({message: `${error}`});
         }
     }
     else{
