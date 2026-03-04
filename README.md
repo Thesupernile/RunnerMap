@@ -10,7 +10,7 @@ I originally created this program as part of my computer science NEA but it has 
 
 Runner Map includes the following dependencies:
 * Osmium        (https://github.com/osmcode/libosmium)
-* Zlib          (https://github.com/madler/zlib)
+* Zlib          (https://github.com/madler/zlib) pre built version for windows x64 (https://github.com/OSDVF/zlib-win-x64)
 * Protozero     (https://github.com/mapbox/protozero)
 * Leaflet       (https://github.com/Leaflet/Leaflet)
 * NodeJS        (https://nodejs.org/en)
@@ -19,10 +19,41 @@ Runner Map includes the following dependencies:
 * CMake-js
 * Nodemon (Dev only) 
 
-## How To Run
+## How To Set Up For Development
+* First, fork the repository and clone it onto your local device (We'll call this folder runnermap/ in these instructions)
+* Download the osmium library and protozero repositories from the link above and add them to the directories runnermap/include/osmium and runnermap/include/protozero respectively
+* If you are using a windows x64 machine, download the pre built version of zlib from the link above and add it to the directory runnermap/zlib
+    * If you are not using a windows x64 machine, you will need to download zlib from source (the other link above) and build it yourself. Add this to the same location described above
+* Download NodeJS on your computer
+* Use npm to install leaflet, browserify, cmake-js, nodemon and express (npm install {dependency})
+* Run the following commands: 
+```
+> npm run buildJvs
+```
+```
+> npm run build
+```
+* These commands build the javascript file and the runnermap library respectively
+* Finally, run the following command to host a runnermap server
+```
+> npm run start
+```
+* Visit http://localhost:3000/ to see the hosted website
 
 
+* The following command can be used to build the runnermap library in debug mode:
+```
+> npm run buildDebug
+```
 
 ## Screenshots
 
+Screenshot showing a generated route:
+
+![Screenshot of program](Screenshots\GeneratedRouteScreenshot.png)
+
+
+Screenshot showing the UI for the program:
+
+![Screenshot of program](Screenshots\Interface.png)
 
