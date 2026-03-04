@@ -28,22 +28,22 @@ Runner Map includes the following dependencies:
 * Use npm to install leaflet, browserify, cmake-js, nodemon and express (npm install {dependency})
 * Run the following commands: 
 ```
-> npm run buildJvs
+npm run buildJvs
 ```
 ```
-> npm run build
+npm run build
 ```
 * These commands build the javascript file and the runnermap library respectively
 * Finally, run the following command to host a runnermap server
 ```
-> npm run start
+npm run start
 ```
 * Visit http://localhost:3000/ to see the hosted website
 
 
 * The following command can be used to build the runnermap library in debug mode:
 ```
-> npm run buildDebug
+npm run buildDebug
 ```
 
 ## Screenshots
