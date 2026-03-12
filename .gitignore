@@ -21,5 +21,4 @@
 *.sln
 *.vcxproj*
 filePathDef.cpp
-package-lock.json
 webmap.js

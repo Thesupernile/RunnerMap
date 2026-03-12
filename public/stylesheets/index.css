@@ -38,6 +38,15 @@ html, body {
       z-index: 1000;
 }
 
+#sideBarButton {
+      position:absolute;
+      width: 1%;
+      height: 20%;
+      left:69%;
+      top: 40%;
+      z-index: 1000;
+}
+
 #map {
       /* configure the size of the map */
       width: 70%;
