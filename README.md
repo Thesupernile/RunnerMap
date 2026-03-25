@@ -19,6 +19,9 @@ Runner Map includes the following dependencies:
 * CMake-js
 * Nodemon (Dev only) 
 
+Runner Map also uses the open meteo elevation API. Link: https://open-meteo.com/en/docs/elevation-api
+This API uses elevation data from the Copernicus DEM 2021 release GLO-90.
+
 ## How To Set Up For Development
 * First, fork the repository and clone it onto your local device (We'll call this folder runnermap/ in these instructions)
 * Download the osmium library and protozero repositories from the link above and add them to the directories runnermap/include/osmium and runnermap/include/protozero respectively
