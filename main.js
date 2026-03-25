@@ -1,11 +1,13 @@
 var L = require('leaflet');
-const xhr = new XMLHttpRequest();
 
 var routeCoords = [];
 var markers = [];
 var lines = [];
 var map = L.map('map').setView({lon: 0.13488678725880782, lat: 52.18808662172259}, 18);
 var requiredDistance = 0;
+var maxElevation = 0;
+var elevationGain = 0;
+var netElevation = 0;
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -134,10 +136,98 @@ function updateTextBoxes(response){
 	requiredDistance = calculateRouteLength(response.requiredPoints);
 	numPoints = routeCoords.length;
 	timeToRun = calculateTimeToRun(requiredDistance, pace);
+	calculateElevations(response.requiredPoints);
 
 	distanceBox.innerHTML = `Calculated Route Distance:  ${requiredDistance}km`;
 	numPointsBox.innerHTML = `Number of Required Destinations:  ${numPoints}`;
 	timeBox.innerHTML = `Approximate Time To Run: ${timeToRun.hrs}hrs ${timeToRun.mins}mins ${timeToRun.secs}secs`;
+}
+
+function calculateElevations(routeCoords){
+	const MAXPOINTSPERREQUEST = 100;
+	const POINTSAMPLINGINTERVAL = 10;
+	maxElevation = 0;
+	elevationGain = 0;
+	netElevation = 0;
+	elevationData = [];
+	currentRequest = 1;
+	requestsRequired = Math.ceil(routeCoords.length / (MAXPOINTSPERREQUEST * POINTSAMPLINGINTERVAL));
+	// Split routeCoords into sets of 100 since 100 points is the maximum allowed in one API request
+	// And we only take the elevation of every 10 points
+	for (let i = 0; i < routeCoords.length; i += (MAXPOINTSPERREQUEST * POINTSAMPLINGINTERVAL)){
+		rawSubroute = routeCoords.slice(i, i + (MAXPOINTSPERREQUEST * POINTSAMPLINGINTERVAL));
+		subroute = []
+		// Adding every tenth point to the subroute
+		for (let j = 0; j < routeCoords.length; j += POINTSAMPLINGINTERVAL){
+			subroute.push(routeCoords[j]);
+		}
+
+		// The HTTP request needs a separate list of lats and lons so we divide them here
+		subroutelats = []
+		subroutelons = []
+		subroute.forEach(coord => {
+			subroutelats.push(coord.lat);
+			subroutelons.push(coord.lng);
+		});
+
+		// Format the HTTP request URL
+		let HTTPrequest = "https://api.open-meteo.com/v1/elevation?latitude=";
+		subroutelats.forEach(lat => {
+			HTTPrequest = HTTPrequest + lat.toString();
+			HTTPrequest += ",";
+		});
+		// Remove the eccess comma at the end
+		HTTPrequest = HTTPrequest.slice(0,-1);
+		HTTPrequest = HTTPrequest + "&longitude=";
+		subroutelons.forEach(lng => {
+			HTTPrequest = HTTPrequest + lng.toString();
+			HTTPrequest += ",";
+		});
+		// Remove the eccess comma at the end
+		HTTPrequest = HTTPrequest.slice(0,-1);
+
+		// Make the HTTP request
+		const xhr = new XMLHttpRequest();
+		let elevationSubData = []
+		xhr.addEventListener("readystatechange", function() {
+			// State 4 means okay
+			if(this.readyState === 4) {
+				elevationSubData = JSON.parse(xhr.response).elevation;
+				elevationData = elevationData.concat(elevationSubData);
+				// Only update on the last time
+				if (currentRequest === requestsRequired){
+					updateElevationBoxes(elevationData);
+				}
+				currentRequest++;
+			}
+		});
+		xhr.open("GET", HTTPrequest)
+		xhr.send()
+	}
+}
+
+function updateElevationBoxes(elevationData){
+	// Calculate the required information from returned values (max elevation, net elevation and elevation gain)
+	netElevation = elevationData[elevationData.length-1] - elevationData[0];
+
+	maxElevation = elevationData[0];
+	for (let i = 1; i < elevationData.length; i++){
+		if (elevationData[i] > maxElevation){
+			maxElevation = elevationData[i];
+		}
+		// Find elevation gain
+		if (elevationData[i] > elevationData[i-1]){
+			elevationGain += (elevationData[i] - elevationData[i-1]);
+		}
+	}
+
+	maxElevationBox = document.getElementById("maxElevationBox");
+	netElevationBox = document.getElementById("netElevationBox");
+	elevationGainBox = document.getElementById("elevationGainBox");
+
+	maxElevationBox.innerHTML = `Maximum Elevation: ${maxElevation}m`;
+	netElevationBox.innerHTML = `Net Elevation: ${netElevation}m`;
+	elevationGainBox.innerHTML = `Elevation Gain: ${elevationGain}m`;
 }
 
 function sendRequest(requiredRouteLength, isRoundTrip){
@@ -148,6 +238,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		routeCoordsToSend.push(routeCoords[0]);
 	}
 	if (isValidInput(requiredRouteLength)){
+		const xhr = new XMLHttpRequest();
 		openLoadingScreen();
 		xhr.open("POST", "/calculateRoute");
 		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -161,7 +252,6 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		closeLoadingScreen();
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			response = JSON.parse(xhr.responseText);
-			console.log(response);
 			
 			let returnedRouteCoords = response.requiredPoints;
 
@@ -218,6 +308,33 @@ document.getElementById("submitButton").addEventListener("click", function submi
 	}
 	roundTrip = document.getElementById("isRoundTripInput").checked;
 	sendRequest(requiredLength, roundTrip, isMinLengthInput);
+});
+
+isSideBarOpen = true;
+sideBarSize = document.getElementById("sideBar").style.width;
+document.getElementById("map").style.width = "70%";
+
+
+document.getElementById("sideBarButton").addEventListener("click", function() {
+	// Remove the side bar and resize the map accordingly
+	sideBar = document.getElementById("sideBar");
+	map = document.getElementById("map");
+	sideBarButton = document.getElementById("sideBarButton");
+
+	if (isSideBarOpen){
+		map.style.width = "100%";
+		sideBar.style.display = "none";
+		sideBarButton.style.left = "98.5%";
+		sideBarButton.innerHTML = "<";
+		isSideBarOpen = false;
+	}
+	else{
+		map.style.width = "70%";
+		sideBar.style.display = "inline";
+		sideBarButton.style.left = "68.5%";
+		sideBarButton.innerHTML = ">";
+		isSideBarOpen = true;
+	}
 });
 
 map.on('click', onMapClick);
