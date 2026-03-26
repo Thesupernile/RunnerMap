@@ -53,10 +53,10 @@ npm run buildDebug
 
 Screenshot showing a generated route:
 
-![Screenshot of program](Screenshots\GeneratedRouteScreenshot.png)
+![Screenshot of program](Screenshots/GeneratedRouteScreenshot.png)
 
 
 Screenshot showing the UI for the program:
 
-![Screenshot of program](Screenshots\Interface.png)
+![Screenshot of program](Screenshots/Interface.png)
 
