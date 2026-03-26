@@ -313,28 +313,31 @@ document.getElementById("submitButton").addEventListener("click", function submi
 isSideBarOpen = true;
 sideBarSize = document.getElementById("sideBar").style.width;
 document.getElementById("map").style.width = "70%";
+map.invalidateSize();
 
 
 document.getElementById("sideBarButton").addEventListener("click", function() {
 	// Remove the side bar and resize the map accordingly
 	sideBar = document.getElementById("sideBar");
-	map = document.getElementById("map");
+	mapElement = document.getElementById("map");
 	sideBarButton = document.getElementById("sideBarButton");
 
 	if (isSideBarOpen){
-		map.style.width = "100%";
+		mapElement.style.width = "100%";
 		sideBar.style.display = "none";
 		sideBarButton.style.left = "98.5%";
 		sideBarButton.innerHTML = "<";
 		isSideBarOpen = false;
 	}
 	else{
-		map.style.width = "70%";
+		mapElement.style.width = "70%";
 		sideBar.style.display = "inline";
 		sideBarButton.style.left = "68.5%";
 		sideBarButton.innerHTML = ">";
 		isSideBarOpen = true;
 	}
+	// Tells leaflet to update the map
+	map.invalidateSize();
 });
 
 map.on('click', onMapClick);
