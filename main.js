@@ -120,11 +120,17 @@ function calculateTimeToRun(distance, pace){
 function clearTextBoxes(){
 	distanceBox = document.getElementById("distanceBox");
 	numPointsBox = document.getElementById("numPointsBox");
-	timeBox = document.getElementById("timeBox");	
+	timeBox = document.getElementById("timeBox");
+	maxElevationBox = document.getElementById("maxElevationBox");
+	netElevationBox = document.getElementById("netElevationBox");
+	elevationGainBox = document.getElementById("elevationGainBox");
 
 	distanceBox.innerHTML = `Calculated Route Distance:  0km`;
 	numPointsBox.innerHTML = `Number of Required Destinations:  0`;
 	timeBox.innerHTML = `Approximate Time To Run: 0hrs 0mins 0secs`;
+	maxElevationBox.innerHTML = `Maximum Elevation: 0m`;
+	netElevationBox.innerHTML = `Net Elevation: 0m`;
+	elevationGainBox.innerHTML = `Elevation Gain: 0m`;
 }
 
 function updateTextBoxes(response){
