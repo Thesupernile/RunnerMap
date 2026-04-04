@@ -27,10 +27,10 @@ html, body {
 .loadBox {
       position: absolute;
       display: none;
-      left: 25%;
-      top: 45%;
-      width: 20%;
-      height: 10%;
+      left: 28%;
+      top: 38%;
+      width: 14%;
+      height: 24%;
       background-color: aliceblue;
       border: solid;
       border-radius: 3px;

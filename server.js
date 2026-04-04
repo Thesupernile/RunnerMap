@@ -22,6 +22,10 @@ function checkRequestValid(requestBody){
 app.get("/", (req, res) =>{
     res.render("index.ejs", {requiredLength : 0, minLength : true});
 });
+
+app.get("/images/RunningMan.gif", (req, res) => {
+    res.sendFile(__dirname + "/images/RunningMan.gif");
+});
     
 app.post("/calculateRoute", (req, res, next) =>{
     let requestBody = req.body;
