@@ -10,39 +10,41 @@
         <div id="map"></div>
         <button id="sideBarButton">></button>
         <div id="sideBar" class="sideBar">
-            <h1>Runner Map</h1>
+            <h1 style="text-align: center;">Runner Map</h1>
             <br>
-            <p id="distanceBox">Calculated Route Distance:  0km</p>
-            <p id="numPointsBox">Number of Required Destinations:  0</p>
-            <p id="maxElevationBox"> Maximum Elevation: 0m </p>
-            <p id="netElevationBox"> Net Elevation: 0m </p>
-            <p id="elevationGainBox"> Elevation Gain: 0m </p>
-            <p id="timeBox">Approximate Time To Run: 0hrs 0mins 0secs</p>
-            <div class="paceInputDiv">
-                <p id="paceDisplay">Pace: 6:00 min/km</p>
-                <input type="range" min="18" max="72" value="36" class="slider" id="paceInput">
-            </div>
-            <label>Minimum Length? </label>
-            <input type="checkbox" id="isMinLengthInput" name="minLength" checked></input>
-            <br>
-            <br>
-            <form action="/calculateRoute" method="POST">
-                <div id="DLSInput" style="display: none;">
-                    <label>Length Of Route Wanted (metres): </label>
-                    <br>
-                    <input type="text" id="requiredLengthInput" name="requiredLength" placeholder="Enter Route Length Here: " ></input>
-                    <br>
-                    <br>
+            <div style="border: solid; padding: 10px; height: 80%; background-color:rgb(230, 248, 255); border-radius: 20px;">
+                <p id="distanceBox">Calculated Route Distance:  </p>
+                <p id="numPointsBox">Number of Required Destinations:  </p>
+                <p id="maxElevationBox"> Maximum Elevation: </p>
+                <p id="netElevationBox"> Net Elevation: </p>
+                <p id="elevationGainBox"> Elevation Gain: </p>
+                <p id="timeBox">Approximate Time To Run: </p>
+                <div class="paceInputDiv">
+                    <p id="paceDisplay">Pace: 6:00 min/km</p>
+                    <input type="range" min="18" max="72" value="36" class="slider" id="paceInput">
                 </div>
-                <label>Round Trip? </label>
-                <input type="checkbox" id="isRoundTripInput" name="roundTrip" value="<%- locals.roundTrip %>"></input>
-            </form>
-            <br>
-            <button id="submitButton"> Create Route </button>
-            <br>
-            <br>
-            <button id="clearButton">Clear Points</button>
-            <p id="ErrorFeedback" style="color: red;" value="<%- locals.errorMessage %>"></p>
+                <label>Minimum Length? </label>
+                <input type="checkbox" id="isMinLengthInput" name="minLength" checked></input>
+                <br>
+                <br>
+                <form action="/calculateRoute" method="POST">
+                    <div id="DLSInput" style="display: none;">
+                        <label>Length Of Route Wanted (metres): </label>
+                        <br>
+                        <input type="text" id="requiredLengthInput" name="requiredLength" placeholder="Enter Route Length Here: " ></input>
+                        <br>
+                        <br>
+                    </div>
+                    <label>Round Trip? </label>
+                    <input type="checkbox" id="isRoundTripInput" name="roundTrip" value="<%- locals.roundTrip %>"></input>
+                </form>
+                <br>
+                <button id="submitButton"> Create Route </button>
+                <br>
+                <br>
+                <button id="clearButton">Clear Points</button>
+                <p id="ErrorFeedback" style="color: red;" value="<%- locals.errorMessage %>"></p>
+            </div>
 
         </div>
         <div id="loadBox" class="loadBox">

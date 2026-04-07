@@ -125,12 +125,12 @@ function clearTextBoxes(){
 	netElevationBox = document.getElementById("netElevationBox");
 	elevationGainBox = document.getElementById("elevationGainBox");
 
-	distanceBox.innerHTML = `Calculated Route Distance:  0km`;
-	numPointsBox.innerHTML = `Number of Required Destinations:  0`;
-	timeBox.innerHTML = `Approximate Time To Run: 0hrs 0mins 0secs`;
-	maxElevationBox.innerHTML = `Maximum Elevation: 0m`;
-	netElevationBox.innerHTML = `Net Elevation: 0m`;
-	elevationGainBox.innerHTML = `Elevation Gain: 0m`;
+	distanceBox.innerHTML = `Calculated Route Distance: `;
+	numPointsBox.innerHTML = `Number of Required Destinations:  `;
+	timeBox.innerHTML = `Approximate Time To Run: `;
+	maxElevationBox.innerHTML = `Maximum Elevation: `;
+	netElevationBox.innerHTML = `Net Elevation: `;
+	elevationGainBox.innerHTML = `Elevation Gain: `;
 }
 
 function updateTextBoxes(response){
@@ -338,7 +338,7 @@ document.getElementById("sideBarButton").addEventListener("click", function() {
 	else{
 		mapElement.style.width = "70%";
 		sideBar.style.display = "inline";
-		sideBarButton.style.left = "68.5%";
+		sideBarButton.style.left = "68.6%";
 		sideBarButton.innerHTML = ">";
 		isSideBarOpen = true;
 	}

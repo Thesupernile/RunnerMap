@@ -3,6 +3,7 @@ html, body {
       height: 100%;
       padding: 0;
       margin: 0;
+      background-color: rgb(255, 213, 163);
 }
 
 #sideBar {
@@ -13,7 +14,10 @@ html, body {
       height: 95%;
       border-left: solid;
       border-width: 3px;
+      border-color: rgb(153, 119, 78);
       padding: 1%;
+      background-color: rgb(255, 213, 163);
+      z-index: 1001;
 }
 
 .paceInputDiv {
@@ -31,10 +35,11 @@ html, body {
       top: 38%;
       width: 14%;
       height: 24%;
-      background-color: aliceblue;
+      background-color: rgb(255, 213, 163);
       border: solid;
       border-radius: 3px;
-      border-width: 1px;
+      border-color: rgb(153, 119, 78);
+      border-width: 0.05%;
       z-index: 1000;
 }
 
@@ -42,9 +47,32 @@ html, body {
       position:absolute;
       width: 1.5%;
       height: 20%;
-      left:68.5%;
+      left:68.6%;
       top: 40%;
       z-index: 1000;
+
+      background-color: rgb(255, 213, 163);
+
+      border: solid;
+      border-right: none;
+      border-color: rgb(153, 119, 78);
+      border-width: 0.05%;
+      border-radius: 3px;
+}
+
+#sideBarButton:hover {
+      position:absolute;
+      width: 1.5%;
+      height: 20%;
+      left:68.6%;
+      top: 40%;
+      z-index: 1000;
+
+      background-color: rgb(252, 222, 186);
+
+      border: solid;
+      border-right: none;
+      border-color: rgb(153, 125, 92);
 }
 
 #map {
