@@ -43,6 +43,16 @@ html, body {
       z-index: 1000;
 }
 
+.infoBox {
+      padding: 10px; 
+      height: 80%; 
+      background-color:rgb(252, 222, 186); 
+
+      border: solid; 
+      border-radius: 20px;
+      border-color: rgb(153, 119, 78);
+}
+
 #sideBarButton {
       position:absolute;
       width: 1.5%;
