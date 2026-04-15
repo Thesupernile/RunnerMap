@@ -28,7 +28,7 @@ This API uses elevation data from the Copernicus DEM 2021 release GLO-90.
 * If you are using a windows x64 machine, download the pre built version of zlib from the link above and add it to the directory runnermap/zlib
     * If you are not using a windows x64 machine, you will need to download zlib from source (the other link above) and build it yourself. Add this to the same location described above
 * Download NodeJS on your computer
-* Use npm to install leaflet, browserify, cmake-js, nodemon and express (npm install {dependency})
+* Use npm to install leaflet, browserify, cmake-js, nodemon and express (npm install {dependency_name})
 * Run the following commands: 
 ```
 npm run buildJvs
@@ -41,7 +41,8 @@ npm run build
 ```
 npm run start
 ```
-* Visit http://localhost:3000/ to see the hosted website
+* Visit http://localhost:3000/ to see the hosted website 
+* (Note: if you wish to change the port this can be done by changing the number passed as a param to app.listen on the last line of the server.js file)
 
 
 * The following command can be used to build the runnermap library in debug mode:
