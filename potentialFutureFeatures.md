@@ -1,7 +1,10 @@
 # Potential Features I may (or may not) implement in the future
 
-* Improve the aesthetics of the website
+* ~~Improve the aesthetics of the website~~
+* ~~Ability to drag a point on the map to a new position~~
 * Ability to remove an individual point instead of removing all the points
+* Change the program to use a single list for both markers and coords (use a struct with both elements)
+* Add arrows to run route lines to make it easier to tell which direction they move
 * Create toggle for disabling out and back routes in the auto route generation
 * Improve filtering for paths that are actually walkable
 * Map auto pans to user's location when they start up the mapping software

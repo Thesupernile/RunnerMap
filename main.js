@@ -18,6 +18,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function onMapClick(e) {
 	routeCoords.push(e.latlng); 
 	let newMarker = L.marker(e.latlng).addTo(map);
+	newMarker.dragging.enable();
 	markers.push(newMarker);
 }
 
