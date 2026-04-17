@@ -17,8 +17,16 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 function onMapClick(e) {
 	routeCoords.push(e.latlng); 
-	let newMarker = L.marker(e.latlng).addTo(map);
-	newMarker.dragging.enable();
+	let newMarker = L.marker(e.latlng, {draggable: true, autoPan: true}).addTo(map);
+	newMarker.on('dragend', function(event){
+		var newPos = newMarker.getLatLng();
+		let markerIndex = markers.indexOf(newMarker);
+		// Checks against -1, which is returned by indexOf if the marker is not present in the list
+		if (markerIndex != -1){
+			routeCoords[markerIndex] = newPos;
+		}
+		else{console.log("ERROR!: A dragged marker was not found in marker list.")}
+	});
 	markers.push(newMarker);
 }
 
