@@ -6,6 +6,7 @@ Runner Map is a website which allows for users to create running routes by plott
 
 I originally created this program as part of my computer science NEA but it has since been updated and improved.
 
+Runner Map has been designed for Google Chrome. The code sticks to widely used brower features however I cannot garuntee functionality or the absence of unexpected errors when using other browsers.
 ## Dependencies
 
 Runner Map includes the following dependencies:

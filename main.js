@@ -18,14 +18,31 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function onMapClick(e) {
 	routeCoords.push(e.latlng); 
 	let newMarker = L.marker(e.latlng, {draggable: true, autoPan: true}).addTo(map);
-	newMarker.on('dragend', function(event){
+	// Code to handle dragging
+	newMarker.on("dragend", function(event){
 		var newPos = newMarker.getLatLng();
 		let markerIndex = markers.indexOf(newMarker);
 		// Checks against -1, which is returned by indexOf if the marker is not present in the list
 		if (markerIndex != -1){
 			routeCoords[markerIndex] = newPos;
+			clearLines();
 		}
 		else{console.log("ERROR!: A dragged marker was not found in marker list.")}
+	});
+	// Code to handle clicking
+	newMarker.on("click", function(event){
+		// Shift or control clicking a point removes it (may be changed to right click in the future)
+		if (event.originalEvent.shiftKey == true || event.originalEvent.ctrlKey == true){
+			// Handle removing the marker from the map
+			let markerIndex = markers.indexOf(newMarker);
+			if (markerIndex != -1){
+				markers.splice(markerIndex, 1);
+				routeCoords.splice(markerIndex, 1);
+				newMarker.remove();
+				clearLines();
+			}
+			else{console.log("ERROR!: A marker requesting to be deleted is not in the marker list.")}
+		}
 	});
 	markers.push(newMarker);
 }
