@@ -1,6 +1,5 @@
 var L = require('leaflet');
 
-var routeCoords = [];
 var markers = [];
 var lines = [];
 var map = L.map('map').setView({lon: 0.13488678725880782, lat: 52.18808662172259}, 18);
@@ -15,16 +14,13 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	maxZoom: 21
 }).addTo(map);
 
-function onMapClick(e) {
-	routeCoords.push(e.latlng); 
+function onMapClick(e) { 
 	let newMarker = L.marker(e.latlng, {draggable: true, autoPan: true}).addTo(map);
 	// Code to handle dragging
 	newMarker.on("dragend", function(event){
-		var newPos = newMarker.getLatLng();
 		let markerIndex = markers.indexOf(newMarker);
 		// Checks against -1, which is returned by indexOf if the marker is not present in the list
 		if (markerIndex != -1){
-			routeCoords[markerIndex] = newPos;
 			clearLines();
 		}
 		else{console.log("ERROR!: A dragged marker was not found in marker list.")}
@@ -37,7 +33,6 @@ function onMapClick(e) {
 			let markerIndex = markers.indexOf(newMarker);
 			if (markerIndex != -1){
 				markers.splice(markerIndex, 1);
-				routeCoords.splice(markerIndex, 1);
 				newMarker.remove();
 				clearLines();
 			}
@@ -72,7 +67,6 @@ document.getElementById("clearButton").addEventListener("click", function clearP
 	clearTextBoxes();
 	
 	markers = [];
-	routeCoords = [];
 });
 
 function isStringNumber(string){
@@ -265,9 +259,11 @@ function updateElevationBoxes(elevationData){
 function sendRequest(requiredRouteLength, isRoundTrip){
 	userErrorBox.innerHTML = " ";
 	let routeCoordsToSend = [];
-	routeCoordsToSend = routeCoords.slice(0);
-	if (isRoundTrip){
-		routeCoordsToSend.push(routeCoords[0]);
+	for (let i = 0; i < markers.length; i++){
+		routeCoordsToSend.push(markers[i].getLatLng());
+	}
+	if(isRoundTrip){
+		routeCoordsToSend.push(markers[i].getLatLng());
 	}
 	if (isValidInput(requiredRouteLength)){
 		const xhr = new XMLHttpRequest();
@@ -325,9 +321,9 @@ document.getElementById("paceInput").oninput = function() {
 
 document.getElementById("isMinLengthInput").addEventListener('change', function() {
   if (this.checked) {
-    document.getElementById("DLSInput").style.display = "none";
+	document.getElementById("DLSInput").style.display = "none";
   } else {
-    document.getElementById("DLSInput").style.display = "inline";
+	document.getElementById("DLSInput").style.display = "inline";
   }
 });
 
