@@ -263,7 +263,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 		routeCoordsToSend.push(markers[i].getLatLng());
 	}
 	if(isRoundTrip){
-		routeCoordsToSend.push(markers[i].getLatLng());
+		routeCoordsToSend.push(markers[0].getLatLng());
 	}
 	if (isValidInput(requiredRouteLength)){
 		const xhr = new XMLHttpRequest();
