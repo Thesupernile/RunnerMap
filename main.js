@@ -84,7 +84,7 @@ function isValidInput(requiredLength){
 		userErrorBox.innerHTML = "Invalid Desired Length!";
 		return false;
 	}
-	if (routeCoords.length < 2){
+	if (markers.length < 2){
 		userErrorBox.innerHTML = "You must place at least two points on the map to create a route!";
 		return false;
 	}
@@ -166,7 +166,7 @@ function updateTextBoxes(response){
 	pace = document.getElementById("paceInput").value * 10;
 
 	requiredDistance = calculateRouteLength(response.requiredPoints);
-	numPoints = routeCoords.length;
+	numPoints = markers.length;
 	timeToRun = calculateTimeToRun(requiredDistance, pace);
 	calculateElevations(response.requiredPoints);
 
@@ -288,7 +288,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 			let returnedRouteCoords = response.requiredPoints;
 
 			clearLines();
-			route = L.polyline(returnedRouteCoords).addTo(map);
+			route = L.polyline(returnedRouteCoords, {color: "#ff8b17"}).addTo(map);
 			lines.push(route);
 			updateTextBoxes(response);
 		} else {
