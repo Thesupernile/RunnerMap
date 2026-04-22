@@ -49,6 +49,12 @@ function clearLines(){
 	lines = [];
 }
 
+function generateRouteLine(returnedRouteCoords){
+	route = L.polyline(returnedRouteCoords, {color: "#ff8b17"}).addTo(map);
+	lines.push(route);
+	map.fitBounds(route.getBounds());
+}
+
 function openLoadingScreen(){
 	document.getElementById("loadBox").style.display = "inline";
 }
@@ -284,8 +290,7 @@ function sendRequest(requiredRouteLength, isRoundTrip){
 			let returnedRouteCoords = response.requiredPoints;
 
 			clearLines();
-			route = L.polyline(returnedRouteCoords, {color: "#ff8b17"}).addTo(map);
-			lines.push(route);
+			generateRouteLine(returnedRouteCoords);
 			updateTextBoxes(response);
 		} else {
 			console.log(`Error: ${xhr.status}`);

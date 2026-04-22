@@ -3,7 +3,8 @@
 * ~~Improve the aesthetics of the website~~
 * ~~Ability to drag a point on the map to a new position~~
 * ~~Ability to remove an individual point instead of removing all the points~~
-* Change the program to use a single list for both markers and coords (use a struct with both elements)
+* ~~Change the program to use a single list for both markers and coords (use a struct with both elements)~~
+* ~~Make map zoom to the route~~
 * Add arrows to run route lines to make it easier to tell which direction they move
     * ~~Change the colour of the lines (just for the fun of it (Probably to orange))~~
 * Create toggle for disabling out and back routes in the auto route generation
