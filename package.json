@@ -9,7 +9,7 @@
     "build": "cmake-js build",
     "buildDebug": "cmake-js build --debug",
     "debug": "cmake-js build --debug",
-    "buildJvs": "browserify webmap.js -o public/javascripts/webmap.js"
+    "buildJvs": "browserify main.js -o public/javascripts/main.js"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,13 @@
   },
   "homepage": "https://github.com/Thesupernile/BackendWrapper#readme",
   "dependencies": {
+    "bindings": "^1.5.0",
     "browserify": "^17.0.1",
     "cmake-js": "^7.4.0",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
     "leaflet": "^1.9.4",
+    "leaflet-arrowheads": "^1.4.0",
     "node": "^20.19.6",
     "node-addon-api": "^8.1.0",
     "v8": "^0.1.0"

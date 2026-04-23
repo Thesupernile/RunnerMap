@@ -21,4 +21,5 @@
 *.sln
 *.vcxproj*
 filePathDef.cpp
-webmap.js
+*public/javascripts/main.js
+*public/javascripts/webmap.js

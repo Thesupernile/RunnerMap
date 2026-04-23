@@ -10,13 +10,15 @@ Runner Map has been designed for Google Chrome. The code sticks to widely used b
 ## Dependencies
 
 Runner Map includes the following dependencies:
-* Osmium        (https://github.com/osmcode/libosmium)
-* Zlib          (https://github.com/madler/zlib) pre built version for windows x64 (https://github.com/OSDVF/zlib-win-x64)
-* Protozero     (https://github.com/mapbox/protozero)
-* Leaflet       (https://github.com/Leaflet/Leaflet)
-* NodeJS        (https://nodejs.org/en)
-    * Node-API  (https://nodejs.org/api/n-api.html)
-* Express       (https://expressjs.com/)
+* Osmium                (https://github.com/osmcode/libosmium)
+* Zlib                  (https://github.com/madler/zlib) 
+    * Pre built version for windows x64 (https://github.com/OSDVF/zlib-win-x64)
+* Protozero             (https://github.com/mapbox/protozero)
+* Leaflet               (https://github.com/Leaflet/Leaflet)
+    *Leaflet Arrowheads (https://github.com/slutske22/leaflet-arrowheads)   
+* NodeJS                (https://nodejs.org/en)
+    * Node-API          (https://nodejs.org/api/n-api.html)
+* Express               (https://expressjs.com/)
 * CMake-js
 * Nodemon (Dev only) 
 
@@ -29,7 +31,7 @@ This API uses elevation data from the Copernicus DEM 2021 release GLO-90.
 * If you are using a windows x64 machine, download the pre built version of zlib from the link above and add it to the directory runnermap/zlib
     * If you are not using a windows x64 machine, you will need to download zlib from source (the other link above) and build it yourself. Add this to the same location described above
 * Download NodeJS on your computer
-* Use npm to install leaflet, browserify, cmake-js, nodemon and express (npm install {dependency_name})
+* Use npm to install leaflet, browserify, cmake-js, nodemon, leaflet arrowheads and express (npm install {dependency_name})
 * Run the following commands: 
 ```
 npm run buildJvs

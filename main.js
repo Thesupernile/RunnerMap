@@ -1,4 +1,5 @@
 var L = require('leaflet');
+require('leaflet-arrowheads');
 
 var markers = [];
 var lines = [];
@@ -7,6 +8,8 @@ var requiredDistance = 0;
 var maxElevation = 0;
 var elevationGain = 0;
 var netElevation = 0;
+
+const userErrorBox = document.getElementById("ErrorFeedback");
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -50,7 +53,7 @@ function clearLines(){
 }
 
 function generateRouteLine(returnedRouteCoords){
-	route = L.polyline(returnedRouteCoords, {color: "#ff8b17"}).addTo(map);
+	route = L.polyline(returnedRouteCoords, {color: "#ff8b17"}).arrowheads({size: "15px", frequency:"80px"}).addTo(map);
 	lines.push(route);
 	map.fitBounds(route.getBounds());
 }
