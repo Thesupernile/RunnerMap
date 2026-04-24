@@ -19,6 +19,8 @@ Runner Map includes the following dependencies:
 * NodeJS                (https://nodejs.org/en)
     * Node-API          (https://nodejs.org/api/n-api.html)
 * Express               (https://expressjs.com/)
+* gpx-parser-builder    (https://github.com/kf99916/gpx-parser-builder)
+* fast-xml-parser       (https://github.com/NaturalIntelligence/fast-xml-parser)
 * CMake-js
 * Nodemon (Dev only) 
 
@@ -31,7 +33,7 @@ This API uses elevation data from the Copernicus DEM 2021 release GLO-90.
 * If you are using a windows x64 machine, download the pre built version of zlib from the link above and add it to the directory runnermap/zlib
     * If you are not using a windows x64 machine, you will need to download zlib from source (the other link above) and build it yourself. Add this to the same location described above
 * Download NodeJS on your computer
-* Use npm to install leaflet, browserify, cmake-js, nodemon, leaflet arrowheads and express (npm install {dependency_name})
+* Use npm to install leaflet, browserify, cmake-js, nodemon, leaflet arrowheads, gpx-parser-builder, fast-xml-parser and express (npm install {dependency_name})
 * Run the following commands: 
 ```
 npm run buildJvs

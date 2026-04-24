@@ -8,6 +8,7 @@
 * ~~Add arrows to run route lines to make it easier to tell which direction they move~~
     * ~~Change the colour of the lines (just for the fun of it (Probably to orange))~~
 * Create toggle for disabling out and back routes in the auto route generation
+* Add in button to let the user flip the route (run it in reverse)
 * Improve filtering for paths that are actually walkable
 * Map auto pans to user's location when they start up the mapping software
 * Link to a geolocator API to allow the user to search for real world locations
