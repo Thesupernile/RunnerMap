@@ -346,6 +346,10 @@ document.getElementById("submitButton").addEventListener("click", function submi
 	sendRequest(requiredLength, roundTrip, isMinLengthInput);
 });
 
+document.getElementById("reverseRouteButton").addEventListener("click", function reverseRoute(){
+	
+})
+
 isSideBarOpen = true;
 sideBarSize = document.getElementById("sideBar").style.width;
 document.getElementById("map").style.width = "70%";

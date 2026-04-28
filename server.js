@@ -26,10 +26,6 @@ app.get("/", (req, res) =>{
 app.get("/images/RunningMan.gif", (req, res) => {
     res.sendFile(__dirname + "/images/RunningMan.gif");
 });
-
-// app.get("/leafletArrows.js", (req, res) =>{
-//     res.sendFile(__dirname + "/include/javascript/leafletArrows.js");
-// })
     
 app.post("/calculateRoute", (req, res, next) =>{
     let requestBody = req.body;
